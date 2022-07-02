@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace REMuns.CoreUtils.CodeAnalysis;
+namespace Rem.CoreUtils.CodeAnalysis;
 
 /// <summary>
 /// Specifies that the value of an enumerable property, field or return value is non-empty.
@@ -14,7 +14,8 @@ namespace REMuns.CoreUtils.CodeAnalysis;
 public sealed class NonEmptyAttribute : Attribute { }
 
 /// <summary>
-/// Specifies that the value of an enumerable parameter should never be empty.
+/// Specifies that the value of an enumerable parameter should never be empty, or that a <see langword="ref"/> or
+/// <see langword="out"/> parameter will not be empty when the method returns.
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
 public sealed class NonEmptyParameterAttribute : Attribute { }
