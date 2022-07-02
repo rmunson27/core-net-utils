@@ -83,37 +83,45 @@ public abstract class ParameterSignAttribute : SignAttribute
 }
 
 /// <summary>
-/// Indicates that a numeric parameter should always be positive.
+/// Indicates that a numeric parameter should always be positive, or that a <see langword="ref"/> or
+/// <see langword="out"/> parameter will be positive when the method returns.
+/// method .
 /// </summary>
 public sealed class PositiveParameterAttribute : ParameterSignAttribute, IPositiveAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should always be negative.
+/// Indicates that a numeric parameter should always be negative, , or that a <see langword="ref"/> or
+/// <see langword="out"/> parameter will be negative when the method returns.
 /// </summary>
 public sealed class NegativeParameterAttribute : ParameterSignAttribute, INegativeAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be negative.
+/// Indicates that a numeric parameter should never be negative, or that a <see langword="ref"/> or
+/// <see langword="out"/> parameter will not be negative when the method returns.
 /// </summary>
 public sealed class NonNegativeParameterAttribute : ParameterSignAttribute, INonNegativeAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be positive.
+/// Indicates that a numeric parameter should never be positive, or that a <see langword="ref"/> or
+/// <see langword="out"/> parameter will not be positive when the method returns.
 /// </summary>
 public sealed class NonPositiveParameterAttribute : ParameterSignAttribute, INonPositiveAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be zero.
+/// Indicates that a numeric parameter should never be zero, or that a <see langword="ref"/> or
+/// <see langword="out"/> parameter will not be zero when the method returns.
 /// </summary>
 public sealed class NonZeroParameterAttribute : ParameterSignAttribute, INonZeroAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should always be finite (i.e. not infinity or NaN).
+/// Indicates that a numeric parameter should always be finite (i.e. not infinity or NaN), or that a
+/// <see langword="ref"/> or <see langword="out"/> parameter will be finite when the method returns.
 /// </summary>
 public sealed class FiniteParameterAttribute : ParameterSignAttribute, IFiniteAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be NaN.
+/// Indicates that a numeric parameter should never be NaN, or that a <see langword="ref"/> or
+/// <see langword="out"/> parameter will not be NaN when the method returns.
 /// </summary>
 public sealed class NotNaNParameterAttribute : ParameterSignAttribute, INotNaNAttribute { }
 #endregion
