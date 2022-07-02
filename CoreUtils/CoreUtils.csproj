@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup Label="Identity">
+		<ProductName>Rem.CoreUtils</ProductName>
+		<ProductVersion>1.0</ProductVersion>
+		<RootNamespace>Rem.CoreUtils</RootNamespace>
+		<Authors>Richard Munson</Authors>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Targets">
+		<TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Language">
+		<LangVersion>10.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+</Project>
