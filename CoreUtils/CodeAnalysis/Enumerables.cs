@@ -5,7 +5,7 @@ using System.Text;
 namespace Rem.CoreUtils.CodeAnalysis;
 
 /// <summary>
-/// Specifies that the value of an enumerable property, field or return value is non-empty.
+/// Specifies that an enumerable property, field or return value is never empty.
 /// </summary>
 [AttributeUsage(
     AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.ReturnValue,
