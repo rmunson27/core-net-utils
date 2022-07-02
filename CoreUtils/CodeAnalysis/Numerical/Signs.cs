@@ -3,21 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Rem.CoreUtils.CodeAnalysis.Numerical;
-
-#region Base
-/// <summary>
-/// Indicates a detail about the sign of a numeric value.
-/// </summary>
-public abstract class SignAttribute : NumericalDetailAttribute
-{
-    /// <summary>
-    /// Prevents this from being directly constructed.
-    /// </summary>
-    private protected SignAttribute() { }
-}
-#endregion
-
-#region Inherited
+#region Member
 /// <summary>
 /// Indicates a detail about the sign of a numeric return value, property, or field.
 /// </summary>
@@ -125,6 +111,19 @@ public sealed class FiniteParameterAttribute : ParameterSignAttribute, IFiniteAt
 public sealed class NotNaNParameterAttribute : ParameterSignAttribute, INotNaNAttribute { }
 #endregion
 
+#region Base
+/// <summary>
+/// Indicates a detail about the sign of a numeric value.
+/// </summary>
+public abstract class SignAttribute : NumericalDetailAttribute
+{
+    /// <summary>
+    /// Prevents this from being directly constructed.
+    /// </summary>
+    private protected SignAttribute() { }
+}
+#endregion
+
 #region Interfaces
 /// <summary>
 /// An interface for attributes that indicate that a numeric value is non-positive.
@@ -161,3 +160,4 @@ public interface IFiniteAttribute : INotNaNAttribute { }
 /// </summary>
 public interface INotNaNAttribute { }
 #endregion
+
