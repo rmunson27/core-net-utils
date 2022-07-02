@@ -25,48 +25,48 @@ public abstract class SignAttribute : NumericalDetailAttribute
     AttributeTargets.ReturnValue | AttributeTargets.Property | AttributeTargets.Field,
     AllowMultiple = false,
     Inherited = true)]
-public abstract class InheritedSignAttribute : SignAttribute
+public abstract class MemberSignAttribute : SignAttribute
 {
     /// <summary>
     /// Prevents this from being directly constructed.
     /// </summary>
-    private protected InheritedSignAttribute() { }
+    private protected MemberSignAttribute() { }
 }
 
 /// <summary>
 /// Indicates that a numeric return value, property or field is always positive.
 /// </summary>
-public sealed class PositiveAttribute : InheritedSignAttribute, IPositiveAttribute { }
+public sealed class PositiveAttribute : MemberSignAttribute, IPositiveAttribute { }
 
 /// <summary>
 /// Indicates that a numeric return value, property or field is always negative.
 /// </summary>
-public sealed class NegativeAttribute : InheritedSignAttribute, INegativeAttribute { }
+public sealed class NegativeAttribute : MemberSignAttribute, INegativeAttribute { }
 
 /// <summary>
 /// Indicates that a numeric return value, property or field is never negative.
 /// </summary>
-public sealed class NonNegativeAttribute : InheritedSignAttribute, INonNegativeAttribute { }
+public sealed class NonNegativeAttribute : MemberSignAttribute, INonNegativeAttribute { }
 
 /// <summary>
 /// Indicates that a numeric return value, property or field is never positive.
 /// </summary>
-public sealed class NonPositiveAttribute : InheritedSignAttribute, INonPositiveAttribute { }
+public sealed class NonPositiveAttribute : MemberSignAttribute, INonPositiveAttribute { }
 
 /// <summary>
 /// Indicates that a numeric return value, property or field is never zero.
 /// </summary>
-public sealed class NonZeroAttribute : InheritedSignAttribute, INonZeroAttribute { }
+public sealed class NonZeroAttribute : MemberSignAttribute, INonZeroAttribute { }
 
 /// <summary>
 /// Indicates that a numeric return value, property or field is always finite (i.e. not infinity or NaN).
 /// </summary>
-public sealed class FiniteAttribute : InheritedSignAttribute, IFiniteAttribute { }
+public sealed class FiniteAttribute : MemberSignAttribute, IFiniteAttribute { }
 
 /// <summary>
 /// Indicates that a numeric return value, property or field is never NaN.
 /// </summary>
-public sealed class NotNaNAttribute : InheritedSignAttribute, INotNaNAttribute { }
+public sealed class NotNaNAttribute : MemberSignAttribute, INotNaNAttribute { }
 #endregion
 
 #region Parameter
@@ -83,44 +83,43 @@ public abstract class ParameterSignAttribute : SignAttribute
 }
 
 /// <summary>
-/// Indicates that a numeric parameter should always be positive, or that a <see langword="ref"/> or
+/// Indicates that a numerical parameter should always be positive, or that a numerical <see langword="ref"/> or
 /// <see langword="out"/> parameter will be positive when the method returns.
-/// method .
 /// </summary>
 public sealed class PositiveParameterAttribute : ParameterSignAttribute, IPositiveAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should always be negative, , or that a <see langword="ref"/> or
+/// Indicates that a numerical parameter should always be negative, or that a numerical <see langword="ref"/> or
 /// <see langword="out"/> parameter will be negative when the method returns.
 /// </summary>
 public sealed class NegativeParameterAttribute : ParameterSignAttribute, INegativeAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be negative, or that a <see langword="ref"/> or
+/// Indicates that a numerical parameter should never be negative, or that a numerical <see langword="ref"/> or
 /// <see langword="out"/> parameter will not be negative when the method returns.
 /// </summary>
 public sealed class NonNegativeParameterAttribute : ParameterSignAttribute, INonNegativeAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be positive, or that a <see langword="ref"/> or
+/// Indicates that a numerical parameter should never be positive, or that a numerical <see langword="ref"/> or
 /// <see langword="out"/> parameter will not be positive when the method returns.
 /// </summary>
 public sealed class NonPositiveParameterAttribute : ParameterSignAttribute, INonPositiveAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be zero, or that a <see langword="ref"/> or
+/// Indicates that a numerical parameter should never be zero, or that a numerical <see langword="ref"/> or
 /// <see langword="out"/> parameter will not be zero when the method returns.
 /// </summary>
 public sealed class NonZeroParameterAttribute : ParameterSignAttribute, INonZeroAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should always be finite (i.e. not infinity or NaN), or that a
-/// <see langword="ref"/> or <see langword="out"/> parameter will be finite when the method returns.
+/// Indicates that a numerical parameter should always be finite (i.e. not infinity or NaN), or that a
+/// numerical <see langword="ref"/> or <see langword="out"/> parameter will be finite when the method returns.
 /// </summary>
 public sealed class FiniteParameterAttribute : ParameterSignAttribute, IFiniteAttribute { }
 
 /// <summary>
-/// Indicates that a numeric parameter should never be NaN, or that a <see langword="ref"/> or
+/// Indicates that a numerical parameter should never be NaN, or that a numerical <see langword="ref"/> or
 /// <see langword="out"/> parameter will not be NaN when the method returns.
 /// </summary>
 public sealed class NotNaNParameterAttribute : ParameterSignAttribute, INotNaNAttribute { }
