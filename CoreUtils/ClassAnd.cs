@@ -324,6 +324,12 @@ public readonly struct ClassAnd<T1, T2>
     public Type GetWrappedType() => _value.GetType();
 
     /// <summary>
+    /// Gets the type of the value wrapped in this instance, or <see langword="null"/> if this instance is the default.
+    /// </summary>
+    /// <returns></returns>
+    public Type? GetWrappedTypeOrNull() => _value?.GetType();
+
+    /// <summary>
     /// Returns a string that represents the value wrapped in this instance.
     /// </summary>
     /// <returns>A string that represents the value wrapped in this instance.</returns>
