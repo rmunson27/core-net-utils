@@ -2,6 +2,7 @@
 using Rem.CoreUtils.ComponentModel;
 using Rem.CoreUtils.Helpers.Throw;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -109,7 +110,8 @@ public static class ClassAnd
 /// </summary>
 /// <typeparam name="T1"></typeparam>
 /// <typeparam name="T2"></typeparam>
-public readonly struct ClassAnd<T1, T2> : IAndType<T1, T2>, IDefaultDeterminableStruct, IEquatable<ClassAnd<T1, T2>>
+public readonly struct ClassAnd<T1, T2>
+    : IAndType<T1, T2>, IDefaultDeterminableStruct, IEquatable<ClassAnd<T1, T2>>, IStructuralEquatable
     where T1 : class
     where T2 : class
 {
@@ -159,6 +161,16 @@ public readonly struct ClassAnd<T1, T2> : IAndType<T1, T2>, IDefaultDeterminable
         _ => false,
     };
 
+    /// <inheritdoc cref="IStructuralEquatable.Equals(object, IEqualityComparer)"/>
+    public bool Equals(object o, IEqualityComparer comparer) => o switch
+    {
+        null => IsDefault,
+        T1 and T2 => comparer.Equals(_value, o),
+        ClassAnd<T1, T2> other => comparer.Equals(this._value, other._value),
+        ClassAnd<T2, T1> other => comparer.Equals(this._value, other._value),
+        _ => false,
+    };
+
     public static bool operator !=(ClassAnd<T1, T2> lhs, ClassAnd<T1, T2> rhs) => !lhs.Equals(rhs);
     public static bool operator ==(ClassAnd<T1, T2> lhs, ClassAnd<T1, T2> rhs) => lhs.Equals(rhs);
 
@@ -188,6 +200,9 @@ public readonly struct ClassAnd<T1, T2> : IAndType<T1, T2>, IDefaultDeterminable
 
     /// <inheritdoc cref="ValueType.GetHashCode"/>
     public override int GetHashCode() => IsDefault ? 0 : _value.GetHashCode();
+
+    /// <inheritdoc cref="IStructuralEquatable.GetHashCode(IEqualityComparer)"/>
+    public int GetHashCode(IEqualityComparer comparer) => comparer.GetHashCode(_value);
     #endregion
 
     #region Conversions
