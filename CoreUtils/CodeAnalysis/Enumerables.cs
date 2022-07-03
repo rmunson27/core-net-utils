@@ -14,8 +14,8 @@ namespace Rem.CoreUtils.CodeAnalysis;
 public sealed class NonEmptyAttribute : Attribute { }
 
 /// <summary>
-/// Specifies that the value of an enumerable parameter should never be empty, or that a <see langword="ref"/> or
-/// <see langword="out"/> parameter will not be empty when the method returns.
+/// Specifies that the value of an enumerable parameter should never be empty, or that an enumerable
+/// <see langword="ref"/> or <see langword="out"/> parameter will not be empty when the method returns.
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
 public sealed class NonEmptyParameterAttribute : Attribute { }
