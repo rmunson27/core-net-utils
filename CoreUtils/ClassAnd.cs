@@ -39,7 +39,7 @@ public static class ClassAnd
     internal static bool EqualsUnsafe<T1, T2>(object? o1, object? o2)
         where T1 : class
         where T2 : class
-        => EqualsUnsafe(o1, o2, EqualityComparer<T1>.Default, EqualityComparer<T2>.Default);
+        => EqualsUnsafe(o1, o2, EqualityComparer<T1?>.Default, EqualityComparer<T2?>.Default);
 
     /// <summary>
     /// Determines equality of the two instances of <typeparamref name="T1"/> and <typeparamref name="T2"/>,
@@ -55,7 +55,7 @@ public static class ClassAnd
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static bool EqualsUnsafe<T1, T2>(
-        object? o1, object? o2, IEqualityComparer<T1> t1Comparer, IEqualityComparer<T2> t2Comparer)
+        object? o1, object? o2, IEqualityComparer<T1?> t1Comparer, IEqualityComparer<T2?> t2Comparer)
         where T1 : class
         where T2 : class
         => t1Comparer.Equals(Unsafe.As<T1>(o1), Unsafe.As<T1>(o2))
