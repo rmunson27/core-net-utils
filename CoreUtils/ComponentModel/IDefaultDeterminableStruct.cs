@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Rem.CoreUtils.Structs;
+namespace Rem.CoreUtils.ComponentModel;
 
 /// <summary>
 /// An interface for structure types that can determine if they are the default value.
