@@ -188,8 +188,32 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     public bool Equals(ClassAnd<T2, T1> other) => ClassAnd.EqualsUnsafe<T1, T2>(_value, other._value);
 
+    public static bool operator !=(ClassAnd<T1, T2> lhs, T1? rhs) => !lhs.Equals(rhs);
+    public static bool operator ==(ClassAnd<T1, T2> lhs, T1? rhs) => lhs.Equals(rhs);
+    public static bool operator !=(T1? lhs, ClassAnd<T1, T2> rhs) => !rhs.Equals(lhs);
+    public static bool operator ==(T1? lhs, ClassAnd<T1, T2> rhs) => rhs.Equals(lhs);
+
     /// <summary>
-    /// Indicates whether the current instance is equal to an instance of a subtype of <typeparamref name="T1"/>
+    /// Indicates whether the current instance is equal to an instance of type <typeparamref name="T1"/>.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool Equals(T1? value) => EqualityComparer<T1?>.Default.Equals(AsT1, value);
+
+    public static bool operator !=(ClassAnd<T1, T2> lhs, T2? rhs) => !lhs.Equals(rhs);
+    public static bool operator ==(ClassAnd<T1, T2> lhs, T2? rhs) => lhs.Equals(rhs);
+    public static bool operator !=(T2? lhs, ClassAnd<T1, T2> rhs) => !rhs.Equals(lhs);
+    public static bool operator ==(T2? lhs, ClassAnd<T1, T2> rhs) => rhs.Equals(lhs);
+
+    /// <summary>
+    /// Indicates whether the current instance is equal to an instance of type <typeparamref name="T2"/>.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool Equals(T2? value) => EqualityComparer<T2?>.Default.Equals(AsT2, value);
+
+    /// <summary>
+    /// Indicates whether the current instance is equal to an instance of a subtype of both <typeparamref name="T1"/>
     /// and <typeparamref name="T2"/>.
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
