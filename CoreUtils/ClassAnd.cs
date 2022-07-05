@@ -64,8 +64,12 @@ public static class ClassAnd
 
     #region Casting
     /// <summary>
-    /// A class containing casting methods for class ands with a fixed first type.
+    /// A class containing casting methods for the first type in a class AND.
     /// </summary>
+    /// <remarks>
+    /// This class allows the generic arguments for its casting methods to be inferred by the compiler based on the
+    /// method arguments.
+    /// </remarks>
     /// <typeparam name="T"></typeparam>
     public static class T1<T> where T : class
     {
@@ -84,8 +88,12 @@ public static class ClassAnd
     }
 
     /// <summary>
-    /// A class containing casting methods for class ands with a fixed second type.
+    /// A class containing casting methods for the second type in a class AND.
     /// </summary>
+    /// <remarks>
+    /// This class allows the generic arguments for its casting methods to be inferred by the compiler based on the
+    /// method arguments.
+    /// </remarks>
     /// <typeparam name="T"></typeparam>
     public static class T2<T> where T : class
     {
@@ -108,8 +116,25 @@ public static class ClassAnd
 /// <summary>
 /// Represents a logical AND of two reference types.
 /// </summary>
+/// 
 /// <typeparam name="T1"></typeparam>
 /// <typeparam name="T2"></typeparam>
+/// 
+/// <remarks>
+/// <para>
+/// Instances of this type cannot be explicitly constructed wrapping <see langword="null"/>; however, the default
+/// value of the type wraps <see langword="null"/>.  Most instance methods and properties function normally (without
+/// throwing an exception) when called on the default instance, and those that do not are decorated with
+/// <see cref="DoesNotReturnIfInstanceDefaultAttribute"/>.  Therefore, the default value of the type can be effectively
+/// used to represent the <see langword="null"/> case.
+/// </para>
+/// 
+/// <para>
+/// Some methods or properties may return <see langword="null"/> when called on the default instance even if the
+/// nullability of the corresponding type disallows it.  These methods or properties are decorated with
+/// <see cref="MaybeDefaultIfInstanceDefaultAttribute"/>.
+/// </para>
+/// </remarks>
 public readonly struct ClassAnd<T1, T2>
     : IAndType<T1, T2>, IDefaultDeterminableStruct, IEquatable<ClassAnd<T1, T2>>, IStructuralEquatable
     where T1 : class
