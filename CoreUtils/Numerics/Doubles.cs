@@ -10,16 +10,16 @@ namespace Rem.CoreUtils.Numerics;
 public static class Doubles
 {
     /// <summary>
-    /// Determines if the <see cref="double"/> value passed in is finite (not infinity or NaN).
+    /// Determines if the current <see cref="double"/> value is finite (not infinity or NaN).
     /// </summary>
     /// <param name="d"></param>
     /// <returns></returns>
-    public static bool IsFinite(double d) => !IsNotFinite(d);
+    public static bool IsFinite(this double d) => !d.IsNotFinite();
 
     /// <summary>
-    /// Determines if the <see cref="double"/> value passed in is not finite (infinity or NaN).
+    /// Determines if the current <see cref="double"/> value is not finite (infinity or NaN).
     /// </summary>
     /// <param name="d"></param>
     /// <returns></returns>
-    public static bool IsNotFinite(double d) => double.IsInfinity(d) || double.IsNaN(d);
+    public static bool IsNotFinite(this double d) => double.IsInfinity(d) || double.IsNaN(d);
 }

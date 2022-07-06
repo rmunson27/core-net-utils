@@ -10,16 +10,16 @@ namespace Rem.CoreUtils.Numerics;
 public static class Floats
 {
     /// <summary>
-    /// Determines if the <see cref="float"/> value passed in is finite (not infinity or NaN).
+    /// Determines if the current <see cref="float"/> value is finite (not infinity or NaN).
     /// </summary>
     /// <param name="f"></param>
     /// <returns></returns>
-    public static bool IsFinite(float f) => !IsNotFinite(f);
+    public static bool IsFinite(this float f) => !f.IsNotFinite();
 
     /// <summary>
-    /// Determines if the <see cref="float"/> value passed in is not finite (infinity or NaN).
+    /// Determines if the current <see cref="float"/> value is not finite (infinity or NaN).
     /// </summary>
     /// <param name="f"></param>
     /// <returns></returns>
-    public static bool IsNotFinite(float f) => float.IsInfinity(f) || float.IsNaN(f);
+    public static bool IsNotFinite(this float f) => float.IsInfinity(f) || float.IsNaN(f);
 }
