@@ -10,6 +10,7 @@ namespace Rem.CoreUtils.ComponentModel;
 using static GenericPropertyChange;
 
 #region Classes
+#region NestedObservableObject
 /// <summary>
 /// A base class for objects that notify of nested property changes.
 /// </summary>
@@ -344,17 +345,13 @@ public abstract class NestedObservableObject
     }
     #endregion
 }
+#endregion
 
+#region GenericPropertyChange
 /// <summary>
-/// A class containing helper methods for subscribing to and unsubscribing from property change notification events
-/// implemented by a given generic reference type.
+/// The internal generic class providing functionality for the generic methods in the non-generic
+/// <see cref="GenericPropertyChange"/> class.
 /// </summary>
-/// 
-/// <remarks>
-/// This class can be useful when extending <see cref="NestedObservableObject"/> and attempting to yield accurate
-/// nested property change notifications on a generic reference type property that may not be known to implement
-/// property change notifications.
-/// </remarks>
 /// 
 /// <typeparam name="TNotifier">
 /// The generic reference type that potentially exposes property change events this class can be used to subscribe to
@@ -671,6 +668,7 @@ public static class GenericPropertyChange
         => (value & flag) == flag;
 }
 #endregion
+#endregion
 
 #region Interfaces
 /// <summary>
@@ -696,7 +694,7 @@ public interface INotifyNestedPropertyChanging : INotifyPropertyChanging
 }
 #endregion
 
-#region Event Handlers
+#region Event Handler Delegates
 /// <summary>
 /// An event indicating that a nested property is changing.
 /// </summary>
