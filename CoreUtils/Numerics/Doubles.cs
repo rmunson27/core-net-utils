@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rem.CoreUtils.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -22,4 +23,23 @@ public static class Doubles
     /// <param name="d"></param>
     /// <returns></returns>
     public static bool IsNotFinite(this double d) => double.IsInfinity(d) || double.IsNaN(d);
+
+    /// <summary>
+    /// Gets an object describing the type of the current <see cref="double"/> value.
+    /// </summary>
+    /// <param name="d"></param>
+    /// <returns></returns>
+    [return: NamedEnum] public static FloatValueType FloatType(this double d)
+    {
+        if (double.IsNaN(d)) return FloatValueType.NotANumber;
+        if (double.IsPositiveInfinity(d)) return FloatValueType.PositiveInfinity;
+        if (double.IsNegativeInfinity(d)) return FloatValueType.NegativeInfinity;
+
+        return Math.Sign(d) switch
+        {
+            < 0 => FloatValueType.NegativeFinite,
+            0 => FloatValueType.Zero,
+            > 0 => FloatValueType.PositiveFinite,
+        };
+    }
 }
