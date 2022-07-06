@@ -11,6 +11,11 @@ namespace Rem.CoreUtils.ComponentModel;
 /// <summary>
 /// A base class for objects that notify of nested property changes.
 /// </summary>
+/// <remarks>
+/// The <see cref="NestedPropertyChanging"/> and <see cref="NestedPropertyChanged"/> events
+/// implemented by this class will be triggered whenever the <see cref="ObservableObject.PropertyChanging"/> and
+/// <see cref="ObservableObject.PropertyChanged"/> events are triggered, respectively.
+/// </remarks>
 public abstract class NestedObservableObject
     : ObservableObject, INotifyNestedPropertyChanged, INotifyNestedPropertyChanging
 {
@@ -20,6 +25,18 @@ public abstract class NestedObservableObject
 
     /// <inheritdoc cref="INotifyNestedPropertyChanging.NestedPropertyChanging"/>
     public event NestedPropertyChangingEventHandler? NestedPropertyChanging;
+    #endregion
+
+    #region Constructor
+    /// <summary>
+    /// Constructs a new instance of the <see cref="NestedObservableObject"/> class.
+    /// </summary>
+    protected NestedObservableObject()
+    {
+        // Ensure that nested property changes are fired whenever property changes are
+        PropertyChanging += This_PropertyChanging;
+        PropertyChanged += This_PropertyChanged;
+    }
     #endregion
 
     #region Property Setters
@@ -234,7 +251,32 @@ public abstract class NestedObservableObject
     }
     #endregion
 
-    #region EventHandler Building Helpers
+    #region Event Handlers
+    /// <summary>
+    /// Fires the <see cref="NestedPropertyChanging"/> event whenever the
+    /// <see cref="ObservableObject.PropertyChanging"/> event is triggered (so long as the property name wrapped in
+    /// the event arguments is not <see langword="null"/>).
+    /// </summary>
+    /// <param name="_"></param>
+    /// <param name="e"></param>
+    private void This_PropertyChanging(object _, PropertyChangingEventArgs e)
+    {
+        if (e.PropertyName is not null) OnNestedPropertyChanging(new(e.PropertyName));
+    }
+
+    /// <summary>
+    /// Fires the <see cref="NestedPropertyChanged"/> event whenever the <see cref="ObservableObject.PropertyChanged"/>
+    /// event is triggered (so long as the property name wrapped in the event arguments is not <see langword="null"/>).
+    /// </summary>
+    /// <param name="_"></param>
+    /// <param name="e"></param>
+    private void This_PropertyChanged(object _, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is not null) OnNestedPropertyChanged(new(e.PropertyName));
+    }
+    #endregion
+
+    #region Event Handler Building Helpers
     /// <summary>
     /// Raises the <see cref="NestedPropertyChanging"/> event with arguments created by adding the child property name
     /// to the event arguments passed in.
@@ -282,43 +324,12 @@ public abstract class NestedObservableObject
 
     #region Event Triggers
     /// <summary>
-    /// Raises the <see cref="ObservableObject.PropertyChanging"/> event, also raising the
-    /// <see cref="NestedPropertyChanging"/> event with the property name supplied by the event arguments.
-    /// </summary>
-    /// <remarks>
-    /// This method will not raise the <see cref="NestedPropertyChanging"/> event if the property name supplied by
-    /// the event arguments is <see langword="null"/>.
-    /// </remarks>
-    /// <param name="e"></param>
-    protected override void OnPropertyChanging(PropertyChangingEventArgs e)
-    {
-        base.OnPropertyChanging(e);
-        if (e.PropertyName is not null) OnNestedPropertyChanging(new(e.PropertyName));
-    }
-
-    /// <summary>
     /// Raises the <see cref="NestedPropertyChanging"/> event.
     /// </summary>
     /// <param name="e"></param>
     protected virtual void OnNestedPropertyChanging(NestedPropertyChangingEventArgs e)
     {
         NestedPropertyChanging?.Invoke(this, e);
-    }
-
-
-    /// <summary>
-    /// Raises the <see cref="ObservableObject.PropertyChanged"/> event, also raising the
-    /// <see cref="NestedPropertyChanged"/> event with the property name supplied by the event arguments.
-    /// </summary>
-    /// <remarks>
-    /// This method will not raise the <see cref="NestedPropertyChanged"/> event if the property name supplied by
-    /// the event arguments is <see langword="null"/>.
-    /// </remarks>
-    /// <param name="e"></param>
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        if (e.PropertyName is not null) OnNestedPropertyChanged(new(e.PropertyName));
     }
 
     /// <summary>
