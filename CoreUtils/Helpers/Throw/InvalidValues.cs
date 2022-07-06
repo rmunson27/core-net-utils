@@ -1,6 +1,5 @@
 ﻿using Rem.CoreUtils.CodeAnalysis;
 using Rem.CoreUtils.ComponentModel;
-using Rem.CoreUtils.Structs;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
