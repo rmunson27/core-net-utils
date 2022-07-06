@@ -13,11 +13,6 @@ namespace Rem.CoreUtilsTest.ComponentModel;
 [TestClass]
 public class NestedPropertyChangeTest
 {
-    #region Properties
-    private ImmutableStack<string> ChangingPath { get; set; } = ImmutableStack<string>.Empty;
-    private ImmutableStack<string> ChangedPath { get; set; } = ImmutableStack<string>.Empty;
-    #endregion
-
     #region Tests
     /// <summary>
     /// Tests the nested property change events raised by instances of the <see cref="NestedObservableObject"/> class.
@@ -25,28 +20,48 @@ public class NestedPropertyChangeTest
     [TestMethod]
     public void TestNestedObservableObjects()
     {
+        #region Variable Setup
+        ImmutableStack<string> changingPath = ImmutableStack<string>.Empty, changedPath = ImmutableStack<string>.Empty;
+        #endregion
+
+        #region Event Setup
         var a = new A();
         a.NestedPropertyChanging += ANestedChanging;
         a.NestedPropertyChanged += ANestedChanged;
+        #endregion
 
+        #region Assertions
         var b = new B();
         a.BValue = b;
-        Assert.IsTrue(ChangingPath.SequenceEqual(new[] { nameof(A.BValue) }));
-        Assert.IsTrue(ChangedPath.SequenceEqual(new[] { nameof(A.BValue) }));
+        Assert.IsTrue(changingPath.SequenceEqual(new[] { nameof(A.BValue) }));
+        Assert.IsTrue(changedPath.SequenceEqual(new[] { nameof(A.BValue) }));
 
         b.CValue = new C();
-        Assert.IsTrue(ChangingPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue) }));
-        Assert.IsTrue(ChangedPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue) }));
+        Assert.IsTrue(changingPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue) }));
+        Assert.IsTrue(changedPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue) }));
 
         b.CValue.BoolValue = true;
-        Assert.IsTrue(ChangingPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue), nameof(C.BoolValue) }));
-        Assert.IsTrue(ChangedPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue), nameof(C.BoolValue) }));
+        Assert.IsTrue(changingPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue), nameof(C.BoolValue) }));
+        Assert.IsTrue(changedPath.SequenceEqual(new[] { nameof(A.BValue), nameof(B.CValue), nameof(C.BoolValue) }));
 
         // The events should have been unsubscribed to, so the change in b should not be picked up
         a.BValue = new B();
         b.CValue.BoolValue = false;
-        Assert.IsTrue(ChangingPath.SequenceEqual(new[] { nameof(A.BValue) }));
-        Assert.IsTrue(ChangingPath.SequenceEqual(new[] { nameof(A.BValue) }));
+        Assert.IsTrue(changingPath.SequenceEqual(new[] { nameof(A.BValue) }));
+        Assert.IsTrue(changingPath.SequenceEqual(new[] { nameof(A.BValue) }));
+        #endregion
+
+        #region Event Handlers
+        void ANestedChanging(object sender, NestedPropertyChangingEventArgs e)
+        {
+            changingPath = e.PropertyPath;
+        }
+
+        void ANestedChanged(object sender, NestedPropertyChangedEventArgs e)
+        {
+            changedPath = e.PropertyPath;
+        }
+        #endregion
     }
 
     /// <summary>
@@ -87,7 +102,7 @@ public class NestedPropertyChangeTest
         int i;
         #endregion
 
-        #region Tests
+        #region Assertions
         #region Changing Only
         var changingOnly = new ChangingOnly();
 
@@ -220,18 +235,6 @@ public class NestedPropertyChangeTest
         void OnNestedChanged(object? _, NestedPropertyChangedEventArgs e) { i |= nestedChangedFlag; }
         #endregion
         #endregion
-    }
-    #endregion
-
-    #region Event Handlers
-    private void ANestedChanging(object sender, NestedPropertyChangingEventArgs e)
-    {
-        ChangingPath = e.PropertyPath;
-    }
-
-    private void ANestedChanged(object sender, NestedPropertyChangedEventArgs e)
-    {
-        ChangedPath = e.PropertyPath;
     }
     #endregion
 
