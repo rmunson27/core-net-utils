@@ -44,9 +44,7 @@ public static class OrType2
     /// Gets whether or not the value wrapped in the current instance is a value of the first type in the logical OR.
     /// </summary>
     /// <typeparam name="TOr"></typeparam>
-    public static bool IsT1<TOr>(this TOr orValue)
-        where TOr : IOrType2
-        => orValue.TypeFlags.HasTypeFlag(TypeFlags.T1);
+    public static bool IsT1<TOr>(this TOr orValue) where TOr : IOrType2 => orValue.TypeFlags.HasTypeFlag(TypeFlags.T1);
 
     /// <summary>
     /// Gets whether or not the value wrapped in the current instance is a value of the first type in the logical OR
