@@ -19,7 +19,7 @@ namespace Rem.CoreUtils.Helpers.Throw;
 /// <para>
 /// Instances of the type can be used to throw exceptions as follows:
 /// <code>
-/// <see langword="var"/> throw = <see langword="new"/> <see cref="FluentThrower"/>();
+/// <see langword="var"/> throw = <see langword="new"/> <see cref="FluentThrowerBase"/>();
 /// throw.IfArgNull(arg, <see langword="nameof"/>(arg)); // Will throw an ArgumentNullException if arg is null
 /// </code>
 /// 
@@ -44,24 +44,27 @@ namespace Rem.CoreUtils.Helpers.Throw;
 /// can use the same extension strategy to add further exception-throwing methods.
 /// </para>
 /// </remarks>
-public class FluentThrower : IBasicComparisonThrower, IBasicNumericThrower, IInvalidDefaultValueThrower
+public class FluentThrowerBase : IBasicComparisonThrower, IBasicNumericThrower, IInvalidDefaultValueThrower
 {
     //
 }
 
 /// <summary>
-/// Wraps a single instance of <see cref="FluentThrower"/> to be used for throwing exceptions.
+/// Wraps a single instance of <see cref="FluentThrowerBase"/> to be used for throwing exceptions.
 /// </summary>
 /// <remarks>
-/// This instance can be globally exposed via <see langword="global"/> <see langword="using"/> directive as follows:
+/// This instance can be globally exposed via <see langword="global"/> <see langword="using"/> directive as follows
+/// (in C# 10+):
 /// <code>
-/// <see langword="global"/> <see langword="using"/> <see langword="static"/> <see cref="FluentThrowerWrapper"/>;
+/// <see langword="global"/> <see langword="using"/> <see cref="Helpers.Throw"/>;
+/// <para />
+/// <see langword="global"/> <see langword="using"/> <see langword="static"/> <see cref="FluentThrowerBaseWrapper"/>;
 /// </code>
 /// </remarks>
-public static class FluentThrowerWrapper
+public static class FluentThrowerBaseWrapper
 {
     /// <summary>
     /// An object that can be used to fluently throw exceptions.
     /// </summary>
-    public static readonly FluentThrower Throw = new();
+    public static readonly FluentThrowerBase Throw = new();
 }
