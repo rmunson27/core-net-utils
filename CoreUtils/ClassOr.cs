@@ -385,7 +385,7 @@ public readonly struct ClassOr<T1, T2>
     /// <param name="child"></param>
     /// <returns></returns>
     [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-    public static ClassOr<T1, T2> FromChildren<T1Child, T2Child>(ClassAnd<T1Child, T2Child> child)
+    public static ClassOr<T1, T2> FromChildren<T1Child, T2Child>(ClassOr<T1Child, T2Child> child)
         where T1Child : class, T1
         where T2Child : class, T2
         => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T1, T2>(child._value));
