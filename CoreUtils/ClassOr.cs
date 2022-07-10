@@ -18,14 +18,10 @@ using TypeFlags2 = OrType2.TypeFlags;
 public static class ClassOr
 {
     /// <summary>
-    /// A class containing casting methods for the first type in a class OR.
+    /// Allows one of the types of the class OR to be fixed to simplify generic calls.
     /// </summary>
-    /// <remarks>
-    /// This class allows the generic arguments for its casting methods to be inferred by the compiler based on the
-    /// method arguments.
-    /// </remarks>
     /// <typeparam name="T"></typeparam>
-    public static class T1<T> where T : class
+    public static class Fix<T> where T : class
     {
         /// <summary>
         /// Creates a new <see cref="ClassOr{T1, T2}"/> from the value passed in without casting.
@@ -35,22 +31,11 @@ public static class ClassOr
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassOr<T, T2> FromChild<TChild, T2>(ClassOr<TChild, T2> child)
+        public static ClassOr<T, T2> FromT1Child<TChild, T2>(ClassOr<TChild, T2> child)
             where TChild : class, T
             where T2 : class
             => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T, T2>(child._value));
-    }
 
-    /// <summary>
-    /// A class containing casting methods for the first type in a class OR.
-    /// </summary>
-    /// <remarks>
-    /// This class allows the generic arguments for its casting methods to be inferred by the compiler based on the
-    /// method arguments.
-    /// </remarks>
-    /// <typeparam name="T"></typeparam>
-    public static class T2<T> where T : class
-    {
         /// <summary>
         /// Creates a new <see cref="ClassOr{T1, T2}"/> from the value passed in without casting.
         /// </summary>
@@ -59,7 +44,7 @@ public static class ClassOr
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassOr<T1, T> FromChild<T1, TChild>(ClassOr<T1, TChild> child)
+        public static ClassOr<T1, T> FromT2Child<T1, TChild>(ClassOr<T1, TChild> child)
             where T1 : class
             where TChild : class, T
             => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T1, T>(child._value));
@@ -139,7 +124,7 @@ public readonly struct ClassOr<T1, T2>
     /// <typeparam name="T"></typeparam>
     /// <param name="Value"></param>
     /// <returns></returns>
-    public static ClassOr<T1, T2> Make<T>(T Value) where T : class, T1, T2
+    public static ClassOr<T1, T2> FromChild<T>(T Value) where T : class, T1, T2
         => new(Throw.IfArgNull(Value, nameof(Value)), TypeFlags2.T1 | TypeFlags2.T2);
 
     /// <summary>
@@ -361,17 +346,17 @@ public readonly struct ClassOr<T1, T2>
     #endregion
 
     #region Conversion
-    /// <inheritdoc cref="IOrType{T1, T2}.CastT1"/>
+    /// <inheritdoc cref="IOrType{T1, T2}.CastToT1"/>
     [return: MaybeDefaultIfInstanceDefault]
-    public T1 CastT1()
+    public T1 CastToT1()
         => IsT1OrDefault()
             ? UnsafeAsT1
             : throw new InvalidCastException(
                 $"Expected instance of type {typeof(T1)}, but got {GetWrappedType()}.");
 
-    /// <inheritdoc cref="IOrType{T1, T2}.CastT2"/>
+    /// <inheritdoc cref="IOrType{T1, T2}.CastToT2"/>
     [return: MaybeDefaultIfInstanceDefault]
-    public T2 CastT2()
+    public T2 CastToT2()
         => IsT2OrDefault()
             ? UnsafeAsT2
             : throw new InvalidCastException(
@@ -387,10 +372,10 @@ public readonly struct ClassOr<T1, T2>
     public static implicit operator ClassOr<T1, T2>(T2? value) => value is null ? default : new(value);
 
     [return: MaybeDefaultIfParameterDefault("value")]
-    public static explicit operator T1(ClassOr<T1, T2> value) => value.CastT1();
+    public static explicit operator T1(ClassOr<T1, T2> value) => value.CastToT1();
 
     [return: MaybeDefaultIfParameterDefault("value")]
-    public static explicit operator T2(ClassOr<T1, T2> value) => value.CastT2();
+    public static explicit operator T2(ClassOr<T1, T2> value) => value.CastToT2();
 
     /// <summary>
     /// Creates a new <see cref="ClassOr{T1, T2}"/> from the value passed in without casting.
@@ -400,7 +385,7 @@ public readonly struct ClassOr<T1, T2>
     /// <param name="child"></param>
     /// <returns></returns>
     [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-    public static ClassOr<T1, T2> FromChild<T1Child, T2Child>(ClassAnd<T1Child, T2Child> child)
+    public static ClassOr<T1, T2> FromChildren<T1Child, T2Child>(ClassAnd<T1Child, T2Child> child)
         where T1Child : class, T1
         where T2Child : class, T2
         => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T1, T2>(child._value));
@@ -413,10 +398,10 @@ public readonly struct ClassOr<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassOr<T1Child, T2> ExplicitCast1<T1Child>() where T1Child : class, T1
+    public ClassOr<T1Child, T2> CastT1ToChild<T1Child>() where T1Child : class, T1
     {
         if (IsDefault) return default;
-        else if (this.IsT1()) return new((T1Child)_value);
+        else if (this.IsOnlyT1()) return new((T1Child)_value);
         else return new(UnsafeAsT2);
     }
 
@@ -428,10 +413,10 @@ public readonly struct ClassOr<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassOr<T1, T2Child> ExplicitCast2<T2Child>() where T2Child : class, T2
+    public ClassOr<T1, T2Child> CastT2ToChild<T2Child>() where T2Child : class, T2
     {
         if (IsDefault) return default;
-        else if (this.IsT2()) return new((T2Child)_value);
+        else if (this.IsOnlyT2()) return new((T2Child)_value);
         else return new(UnsafeAsT1);
     }
 
@@ -445,13 +430,18 @@ public readonly struct ClassOr<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassOr<T1Child, T2Child> ExplicitCast<T1Child, T2Child>()
+    public ClassOr<T1Child, T2Child> CastToChildren<T1Child, T2Child>()
         where T1Child : class, T1
         where T2Child : class, T2
-    {
-        if (IsDefault) return default;
-        else return this.IsT1() ? new((T1Child)_value) : new((T2Child)_value);
-    }
+        => _value switch
+        {
+            null => default,
+            T1Child t1C => new(t1C),
+            T2Child t2C => new(t2C),
+            _ => throw new InvalidCastException(
+                $"Cannot cast value of type '{_value.GetType()}' "
+                    + $"to either '{typeof(T1Child)}' or '{typeof(T2Child)}'."),
+        };
 
     /// <summary>
     /// Performs an explicit cast to a type extending both <typeparamref name="T1"/> and <typeparamref name="T2"/>.
@@ -460,7 +450,7 @@ public readonly struct ClassOr<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: MaybeDefaultIfInstanceDefault]
-    public TChild ExplicitCast<TChild>() where TChild : class, T1, T2 => (TChild)_value;
+    public TChild CastToChild<TChild>() where TChild : class, T1, T2 => (TChild)_value;
     #endregion
 
     #region Other Methods

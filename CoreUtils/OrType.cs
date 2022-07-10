@@ -134,14 +134,14 @@ public interface IOrType<out T1, out T2> : IOrType2
     /// </summary>
     /// <returns>The result of the cast.</returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
-    public T1 CastT1();
+    public T1 CastToT1();
 
     /// <summary>
     /// Casts the value wrapped in this instance to an instance of <typeparamref name="T2"/>.
     /// </summary>
     /// <returns>The result of the cast.</returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
-    public T2 CastT2();
+    public T2 CastToT2();
 }
 
 /// <summary>
