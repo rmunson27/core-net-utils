@@ -33,6 +33,11 @@ public static class OrType2
         /// Indicates that the value wrapped in a logical OR instance is an instance of the second type.
         /// </summary>
         T2 = 2,
+
+        /// <summary>
+        /// Indicates that the value wrapped in a logical OR instance is an instance of both types.
+        /// </summary>
+        Both = T1 | T2,
     }
 
     /// <summary>
@@ -75,9 +80,7 @@ public static class OrType2
     /// <typeparam name="TOr"></typeparam>
     /// <param name="orValue"></param>
     /// <returns></returns>
-    public static bool IsBothTypes<TOr>(this TOr orValue)
-        where TOr : IOrType2
-        => orValue.TypeFlags == (TypeFlags.T1 | TypeFlags.T2);
+    public static bool IsBothTypes<TOr>(this TOr orValue) where TOr : IOrType2 => orValue.TypeFlags == TypeFlags.Both;
 
     /// <summary>
     /// Determines whether or not the current instance has the type flag passed in set.

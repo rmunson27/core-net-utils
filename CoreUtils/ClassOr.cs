@@ -125,7 +125,7 @@ public readonly struct ClassOr<T1, T2>
     /// <param name="Value"></param>
     /// <returns></returns>
     public static ClassOr<T1, T2> FromChild<T>(T Value) where T : class, T1, T2
-        => new(Throw.IfArgNull(Value, nameof(Value)), TypeFlags2.T1 | TypeFlags2.T2);
+        => new(Throw.IfArgNull(Value, nameof(Value)), TypeFlags2.Both);
 
     /// <summary>
     /// Constructs a new instance of the <see cref="ClassOr{T1, T2}"/> struct wrapping the value passed in.
