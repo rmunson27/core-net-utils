@@ -51,26 +51,20 @@ public static class OrType2
     /// and not the second.
     /// </summary>
     /// <typeparam name="TOr"></typeparam>
-    public static bool IsOnlyT1<TOr>(this TOr orValue)
-        where TOr : IOrType2
-        => orValue.TypeFlags == TypeFlags.T1;
+    public static bool IsOnlyT1<TOr>(this TOr orValue) where TOr : IOrType2 => orValue.TypeFlags == TypeFlags.T1;
 
     /// <summary>
     /// Gets whether or not the value wrapped in the current instance is a value of the second type in the logical OR.
     /// </summary>
     /// <typeparam name="TOr"></typeparam>
-    public static bool IsT2<TOr>(this TOr orValue)
-        where TOr : IOrType2
-        => orValue.TypeFlags.HasTypeFlag(TypeFlags.T2);
+    public static bool IsT2<TOr>(this TOr orValue) where TOr : IOrType2 => orValue.TypeFlags.HasTypeFlag(TypeFlags.T2);
 
     /// <summary>
     /// Gets whether or not the value wrapped in the current instance is a value of the second type in the logical OR
     /// and not the first.
     /// </summary>
     /// <typeparam name="TOr"></typeparam>
-    public static bool IsOnlyT2<TOr>(this TOr orValue)
-        where TOr : IOrType2
-        => orValue.TypeFlags == TypeFlags.T2;
+    public static bool IsOnlyT2<TOr>(this TOr orValue) where TOr : IOrType2 => orValue.TypeFlags == TypeFlags.T2;
 
     /// <summary>
     /// Gets whether or not the value wrapped in the current instance is a value of both types in the logical OR.
