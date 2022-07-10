@@ -48,6 +48,20 @@ public static class ClassOr
             where T1 : class
             where TChild : class, T
             => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T1, T>(child._value));
+
+        /// <summary>
+        /// Gets the value wrapped in the <see cref="ClassOr{T1, T2}"/> passed in as an instance of
+        /// <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="child"></param>
+        /// <returns></returns>
+        [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
+        public static T FromChild<T1, T2>(ClassOr<T1, T2> child)
+            where T1 : class, T
+            where T2 : class, T
+            => Unsafe.As<T>(child._value);
     }
 }
 
@@ -398,12 +412,26 @@ public readonly struct ClassOr<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassOr<T1Child, T2> CastT1ToChild<T1Child>() where T1Child : class, T1
+    public ClassOr<T1Child, T2> CastT1ToChild<T1Child>() where T1Child : class, T1 => _typeFlags switch
     {
-        if (IsDefault) return default;
-        else if (this.IsOnlyT1()) return new((T1Child)_value);
-        else return new(UnsafeAsT2);
-    }
+        TypeFlags2.None => default,
+        TypeFlags2.T1 => new((T1Child)_value),
+        _ => new(UnsafeAsT2), // Might not be T1Child, but is definitely T2
+    };
+
+    /// <summary>
+    /// Performs a nullable cast of <typeparamref name="T1"/>, forming a new <see cref="ClassOr{T1, T2}"/> with
+    /// <typeparamref name="T1Child"/> replacing <typeparamref name="T1"/>, or yielding the default instance if the
+    /// value wrapped in this instance is not an instance of <typeparamref name="T1Child"/>.
+    /// </summary>
+    /// <typeparam name="T1Child"></typeparam>
+    /// <returns></returns>
+    public ClassOr<T1Child, T2> T1AsChild<T1Child>() where T1Child : class, T1 => _typeFlags switch
+    {
+        TypeFlags2.None => default,
+        TypeFlags2.T1 => _value is T1Child t1c ? new(t1c) : default,
+        _ => new(UnsafeAsT2), // Might not be T1Child, but is definitely T2
+    };
 
     /// <summary>
     /// Performs an explicit cast of <typeparamref name="T2"/>, forming a new <see cref="ClassOr{T1, T2}"/> with
@@ -413,12 +441,26 @@ public readonly struct ClassOr<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassOr<T1, T2Child> CastT2ToChild<T2Child>() where T2Child : class, T2
+    public ClassOr<T1, T2Child> CastT2ToChild<T2Child>() where T2Child : class, T2 => _typeFlags switch
     {
-        if (IsDefault) return default;
-        else if (this.IsOnlyT2()) return new((T2Child)_value);
-        else return new(UnsafeAsT1);
-    }
+        TypeFlags2.None => default,
+        TypeFlags2.T2 => new((T2Child)_value),
+        _ => new(UnsafeAsT1), // Might not be T2Child, but is definitely T1
+    };
+
+    /// <summary>
+    /// Performs a nullable cast of <typeparamref name="T2"/>, forming a new <see cref="ClassOr{T1, T2}"/> with
+    /// <typeparamref name="T2Child"/> replacing <typeparamref name="T2"/>, or yielding the default instance if the
+    /// value wrapped in this instance is not an instance of <typeparamref name="T2Child"/>.
+    /// </summary>
+    /// <typeparam name="T2Child"></typeparam>
+    /// <returns></returns>
+    public ClassOr<T1, T2Child> T2AsChild<T2Child>() where T2Child : class, T2 => _typeFlags switch
+    {
+        TypeFlags2.None => default,
+        TypeFlags2.T2 => _value is T2Child t2c ? new(t2c) : default,
+        _ => new(UnsafeAsT1), // Might not be T2Child, but is definitely T1
+    };
 
     /// <summary>
     /// Performs an explicit cast of both <typeparamref name="T1"/> and <typeparamref name="T2"/>, forming a new
@@ -444,6 +486,26 @@ public readonly struct ClassOr<T1, T2>
         };
 
     /// <summary>
+    /// Performs a nullable cast of both <typeparamref name="T1"/> and <typeparamref name="T2"/>, forming a new
+    /// <see cref="ClassOr{T1, T2}"/> with <typeparamref name="T1Child"/> replacing <typeparamref name="T1"/> and
+    /// <typeparamref name="T2Child"/> replacing <typeparamref name="T2"/>, or returns the default instance if the
+    /// value wrapped in this instance is not an instance of both <typeparamref name="T1Child"/>
+    /// and <typeparamref name="T2Child"/>.
+    /// </summary>
+    /// <typeparam name="T1Child"></typeparam>
+    /// <typeparam name="T2Child"></typeparam>
+    /// <returns></returns>
+    public ClassOr<T1Child, T2Child> AsChildren<T1Child, T2Child>()
+        where T1Child : class, T1
+        where T2Child : class, T2
+        => _value switch
+        {
+            T1Child t1C => new(t1C),
+            T2Child t2C => new(t2C),
+            _ => default,
+        };
+
+    /// <summary>
     /// Performs an explicit cast to a type extending both <typeparamref name="T1"/> and <typeparamref name="T2"/>.
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
@@ -451,6 +513,13 @@ public readonly struct ClassOr<T1, T2>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: MaybeDefaultIfInstanceDefault]
     public TChild CastToChild<TChild>() where TChild : class, T1, T2 => (TChild)_value;
+
+    /// <summary>
+    /// Performs a nullable cast to a type extending both <typeparamref name="T1"/> and <typeparamref name="T2"/>.
+    /// </summary>
+    /// <typeparam name="TChild"></typeparam>
+    /// <returns></returns>
+    public TChild? AsChild<TChild>() where TChild : class, T1, T2 => _value as TChild;
     #endregion
 
     #region Other Methods
