@@ -305,8 +305,8 @@ public readonly struct ClassOr<T1, T2>
     /// <typeparam name="TChild"></typeparam>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool Equals<TChild>(TChild? value) where TChild : class, T1, T2
-        => Equals(value, EqualityComparer<T1?>.Default, EqualityComparer<T2?>.Default);
+    public bool EqualsChild<TChild>(TChild? value) where TChild : class, T1, T2
+        => EqualsChild(value, EqualityComparer<T1?>.Default, EqualityComparer<T2?>.Default);
 
     /// <summary>
     /// Indicates whether the current instance is equal to an instance of a subtype of <typeparamref name="T1"/>
@@ -318,7 +318,7 @@ public readonly struct ClassOr<T1, T2>
     /// <param name="t1Comparer"></param>
     /// <param name="t2Comparer"></param>
     /// <returns></returns>
-    public bool Equals<TChild>(TChild? value, IEqualityComparer<T1?> t1Comparer, IEqualityComparer<T2?> t2Comparer)
+    public bool EqualsChild<TChild>(TChild? value, IEqualityComparer<T1?> t1Comparer, IEqualityComparer<T2?> t2Comparer)
         where TChild : class, T1, T2
         => _typeFlags switch
         {

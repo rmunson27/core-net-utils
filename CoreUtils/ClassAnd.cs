@@ -261,7 +261,7 @@ public readonly struct ClassAnd<T1, T2>
     /// <typeparam name="TChild"></typeparam>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool Equals<TChild>(TChild? value) where TChild : class, T1, T2
+    public bool EqualsChild<TChild>(TChild? value) where TChild : class, T1, T2
         => ClassAnd.EqualsUnsafe<T1, T2>(_value, value);
 
     /// <inheritdoc cref="ValueType.GetHashCode"/>
