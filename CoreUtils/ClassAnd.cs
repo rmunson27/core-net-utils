@@ -78,7 +78,7 @@ public static class ClassAnd
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassAnd<T1, T2> FromChild<T1Child, T2>(ClassAnd<T1Child, T2> child)
+        public static ClassAnd<T1, T2> From<T1Child, T2>(ClassAnd<T1Child, T2> child)
             where T1Child : class, T1
             where T2 : class
             => new(child._value);
@@ -100,7 +100,7 @@ public static class ClassAnd
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassAnd<T1, T2> FromChild<T1, T2Child>(ClassAnd<T1, T2Child> child)
+        public static ClassAnd<T1, T2> From<T1, T2Child>(ClassAnd<T1, T2Child> child)
             where T1 : class
             where T2Child : class, T2
             => new(child._value);
@@ -122,7 +122,7 @@ public static class ClassAnd
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static TParent FromChild<T1, T2>(ClassAnd<T1, T2> child)
+        public static TParent From<T1, T2>(ClassAnd<T1, T2> child)
             where T1 : class, TParent
             where T2 : class, TParent
             => Unsafe.As<TParent>(child._value);
@@ -357,7 +357,7 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassAnd<T1Child, T2> CastT1ToChild<T1Child>() where T1Child : class, T1 => new((T1Child)_value);
+    public ClassAnd<T1Child, T2> CastT1To<T1Child>() where T1Child : class, T1 => new((T1Child)_value);
 
     /// <summary>
     /// Performs a nullable cast of <typeparamref name="T1"/>, forming a new <see cref="ClassAnd{T1, T2}"/> with
@@ -366,7 +366,7 @@ public readonly struct ClassAnd<T1, T2>
     /// </summary>
     /// <typeparam name="T1Child"></typeparam>
     /// <returns></returns>
-    public ClassAnd<T1Child, T2> T1AsChild<T1Child>() where T1Child : class, T1
+    public ClassAnd<T1Child, T2> T1As<T1Child>() where T1Child : class, T1
         => _value is T1Child ? new(_value) : default;
 
     /// <summary>
@@ -377,7 +377,7 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassAnd<T1, T2Child> CastT2ToChild<T2Child>() where T2Child : class, T2 => new((T2Child)_value);
+    public ClassAnd<T1, T2Child> CastT2To<T2Child>() where T2Child : class, T2 => new((T2Child)_value);
 
     /// <summary>
     /// Performs a nullable cast of <typeparamref name="T2"/>, forming a new <see cref="ClassAnd{T1, T2}"/> with
@@ -386,7 +386,7 @@ public readonly struct ClassAnd<T1, T2>
     /// </summary>
     /// <typeparam name="T2Child"></typeparam>
     /// <returns></returns>
-    public ClassAnd<T1, T2Child> T2AsChild<T2Child>() where T2Child : class, T2
+    public ClassAnd<T1, T2Child> T2As<T2Child>() where T2Child : class, T2
         => _value is T2Child ? new(_value) : default;
 
     /// <summary>
@@ -431,7 +431,7 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public TChild CastToChild<TChild>() where TChild : class, T1, T2 => (TChild)_value;
+    public TChild CastTo<TChild>() where TChild : class, T1, T2 => (TChild)_value;
 
     /// <summary>
     /// Performs a nullable cast to a type extending both <typeparamref name="T1"/> and <typeparamref name="T2"/>,
@@ -440,7 +440,7 @@ public readonly struct ClassAnd<T1, T2>
     /// </summary>
     /// <typeparam name="TChild"></typeparam>
     /// <returns></returns>
-    public TChild? AsChild<TChild>() where TChild : class, T1, T2 => _value as TChild;
+    public TChild? As<TChild>() where TChild : class, T1, T2 => _value as TChild;
     #endregion
 
         #region Other Methods
