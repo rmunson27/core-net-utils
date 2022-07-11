@@ -194,7 +194,17 @@ public readonly struct ClassAnd<T1, T2>
 
     #region Equality
     /// <inheritdoc cref="object.Equals(object)"/>
-    public override bool Equals(object? o) => o switch
+    public override bool Equals(object? o) => Equals(o, EqualityComparer<T1?>.Default, EqualityComparer<T2?>.Default);
+
+    /// <summary>
+    /// Determines if the current instance is equal to an object passed in, using the given
+    /// <see cref="IEqualityComparer{T}"/> instances to determine equality.
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="t1Comparer"></param>
+    /// <param name="t2Comparer"></param>
+    /// <returns></returns>
+    public bool Equals(object? o, IEqualityComparer<T1?> t1Comparer, IEqualityComparer<T2?> t2Comparer) => o switch
     {
         null => IsDefault,
         T1 and T2 => ClassAnd.EqualsUnsafe<T1, T2>(_value, o),
@@ -242,6 +252,14 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     public bool Equals(T1? value) => EqualityComparer<T1?>.Default.Equals(AsT1, value);
 
+    /// <summary>
+    /// Indicates whether the current instance is equal to an instance of type <typeparamref name="T1"/>,
+    /// using the specified <see cref="IEqualityComparer{T}"/> to compare equality.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool Equals(T1? value, IEqualityComparer<T1?> comparer) => comparer.Equals(this.AsT1, value);
+
     public static bool operator !=(ClassAnd<T1, T2> lhs, T2? rhs) => !lhs.Equals(rhs);
     public static bool operator ==(ClassAnd<T1, T2> lhs, T2? rhs) => lhs.Equals(rhs);
     public static bool operator !=(T2? lhs, ClassAnd<T1, T2> rhs) => !rhs.Equals(lhs);
@@ -252,7 +270,15 @@ public readonly struct ClassAnd<T1, T2>
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool Equals(T2? value) => EqualityComparer<T2?>.Default.Equals(AsT2, value);
+    public bool Equals(T2? value) => EqualityComparer<T2?>.Default.Equals(this.AsT2, value);
+
+    /// <summary>
+    /// Indicates whether the current instance is equal to an instance of type <typeparamref name="T2"/>,
+    /// using the specified <see cref="IEqualityComparer{T}"/> to compare equality.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool Equals(T2? value, IEqualityComparer<T2?> comparer) => comparer.Equals(this.AsT2, value);
 
     /// <summary>
     /// Indicates whether the current instance is equal to an instance of a subtype of both <typeparamref name="T1"/>
@@ -263,6 +289,20 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     public bool EqualsChild<TChild>(TChild? value) where TChild : class, T1, T2
         => ClassAnd.EqualsUnsafe<T1, T2>(_value, value);
+
+    /// <summary>
+    /// Indicates whether the current instance is equal to an instance of a subtype of both <typeparamref name="T1"/>
+    /// and <typeparamref name="T2"/>, using the specified <see cref="IEqualityComparer{T}"/> instances to determine
+    /// equality.
+    /// </summary>
+    /// <typeparam name="TChild"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="t1Comparer"></param>
+    /// <param name="t2Comparer"></param>
+    /// <returns></returns>
+    public bool EqualsChild<TChild>(TChild? value, IEqualityComparer<T1?> t1Comparer, IEqualityComparer<T2?> t2Comparer)
+        where TChild : class, T1, T2
+        => ClassAnd.EqualsUnsafe(_value, value, t1Comparer, t2Comparer);
 
     /// <inheritdoc cref="ValueType.GetHashCode"/>
     public override int GetHashCode() => IsDefault ? 0 : _value.GetHashCode();
