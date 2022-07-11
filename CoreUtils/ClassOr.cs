@@ -568,7 +568,7 @@ public readonly struct ClassOr<T1, T2>
     public bool IsT2OrDefault() => IsDefault || this.IsT2();
 
     /// <inheritdoc cref="object.ToString"/>
-    public override string ToString() => _value is null ? "null" : _value.ToString();
+    public override string? ToString() => _value is null ? "null" : _value.ToString();
     #endregion
 }
 

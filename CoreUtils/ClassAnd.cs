@@ -213,7 +213,7 @@ public readonly struct ClassAnd<T1, T2>
     };
 
     /// <inheritdoc cref="IStructuralEquatable.Equals(object, IEqualityComparer)"/>
-    public bool Equals(object o, IEqualityComparer comparer) => o switch
+    public bool Equals(object? o, IEqualityComparer comparer) => o switch
     {
         null => IsDefault,
         T1 and T2 => comparer.Equals(_value, o),
@@ -458,7 +458,7 @@ public readonly struct ClassAnd<T1, T2>
     /// Returns a string that represents the value wrapped in this instance.
     /// </summary>
     /// <returns>A string that represents the value wrapped in this instance.</returns>
-    public override string ToString() => _value is null ? "null" : _value.ToString();
+    public override string? ToString() => _value is null ? "null" : _value.ToString();
     #endregion
 }
 

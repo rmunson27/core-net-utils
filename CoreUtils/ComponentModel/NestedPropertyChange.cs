@@ -262,7 +262,7 @@ public abstract class NestedObservableObject
     /// </summary>
     /// <param name="_"></param>
     /// <param name="e"></param>
-    private void This_PropertyChanging(object _, PropertyChangingEventArgs e)
+    private void This_PropertyChanging(object? _, PropertyChangingEventArgs e)
     {
         if (e.PropertyName is not null) OnNestedPropertyChanging(new(e.PropertyName));
     }
@@ -273,7 +273,7 @@ public abstract class NestedObservableObject
     /// </summary>
     /// <param name="_"></param>
     /// <param name="e"></param>
-    private void This_PropertyChanged(object _, PropertyChangedEventArgs e)
+    private void This_PropertyChanged(object? _, PropertyChangedEventArgs e)
     {
         if (e.PropertyName is not null) OnNestedPropertyChanged(new(e.PropertyName));
     }
@@ -299,7 +299,10 @@ public abstract class NestedObservableObject
     /// <param name="e"></param>
     protected void OnChildPropertyChanging(string childPropertyName, PropertyChangingEventArgs e)
     {
-        OnNestedPropertyChanging(new(ImmutableStack.CreateRange(new[] { e.PropertyName, childPropertyName })));
+        if (e.PropertyName is not null)
+        {
+            OnNestedPropertyChanging(new(ImmutableStack.CreateRange(new[] { e.PropertyName, childPropertyName })));
+        }
     }
 
     /// <summary>
@@ -321,7 +324,10 @@ public abstract class NestedObservableObject
     /// <param name="e"></param>
     protected void OnChildPropertyChanged(string childPropertyName, PropertyChangedEventArgs e)
     {
-        OnNestedPropertyChanged(new(ImmutableStack.CreateRange(new[] { e.PropertyName, childPropertyName })));
+        if (e.PropertyName is not null)
+        {
+            OnNestedPropertyChanged(new(ImmutableStack.CreateRange(new[] { e.PropertyName, childPropertyName })));
+        }
     }
     #endregion
 
