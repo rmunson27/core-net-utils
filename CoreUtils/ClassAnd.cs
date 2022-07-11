@@ -206,9 +206,9 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     public bool Equals(object? o, IEqualityComparer<T1?> t1Comparer, IEqualityComparer<T2?> t2Comparer) => o switch
     {
-        (T1 and T2) or null => ClassAnd.EqualsUnsafe<T1, T2>(_value, o),
-        ClassAnd<T1, T2> other => Equals(other),
-        ClassAnd<T2, T1> other => Equals(other),
+        (T1 and T2) or null => ClassAnd.EqualsUnsafe(_value, o, t1Comparer, t2Comparer),
+        ClassAnd<T1, T2> other => Equals(other, t1Comparer, t2Comparer),
+        ClassAnd<T2, T1> other => Equals(other, t1Comparer, t2Comparer),
         _ => false,
     };
 
