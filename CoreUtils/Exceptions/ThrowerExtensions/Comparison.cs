@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Rem.CoreUtils.Helpers.Throw.BasicExtensions;
+namespace Rem.CoreUtils.Exceptions.ThrowerExtensions;
 
 /// <summary>
 /// A series of extension methods offering a simple fluent API for throwing exceptions relating to comparable values.

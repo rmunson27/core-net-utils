@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Rem.CoreUtils.Helpers.Throw;
+namespace Rem.CoreUtils.Exceptions;
 
 /// <summary>
 /// A class offering a simple fluent interface for throwing exceptions using the extension methods defined in
@@ -13,14 +13,14 @@ namespace Rem.CoreUtils.Helpers.Throw;
 /// <para>
 /// This class is mainly intended to offer a less verbose way of throwing exceptions in cases that commonly arise
 /// in code.
-/// It has no functionality of its own; rather, the <see cref="BasicExtensions"/> namespace contains basic extension
+/// It has no functionality of its own; rather, the <see cref="ThrowerExtensions"/> namespace contains basic extension
 /// methods providing the functionality, so that users can extend the functionality by providing their own
 /// extension methods.
 /// </para>
 /// 
 /// <para>
 /// Instances of the type can be used to throw exceptions as follows (assuming the contents of the
-/// <see cref="BasicExtensions"/> namespace have been properly imported):
+/// <see cref="ThrowerExtensions"/> namespace have been properly imported):
 /// <code>
 /// <see langword="var"/> throw = <see cref="Throw"/>;
 /// throw.IfArgNull(arg, <see langword="nameof"/>(arg)); // Will throw an ArgumentNullException if arg is null
