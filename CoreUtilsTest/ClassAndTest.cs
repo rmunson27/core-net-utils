@@ -51,46 +51,46 @@ public class ClassAndTest
         #endregion
 
         #region Common Parent
-        Assert.IsNull(ClassAnd.FixParent<object>.FromChild(defaultAnd));
-        Assert.IsNotNull(ClassAnd.FixParent<object>.FromChild(nonDefaultAnd));
+        Assert.IsNull(ClassAnd.FixParent<object>.From(defaultAnd));
+        Assert.IsNotNull(ClassAnd.FixParent<object>.From(nonDefaultAnd));
         #endregion
 
         #region Common Child
-        Assert.IsNull(defaultAnd.CastToChild<ClassE>());
-        Assert.That.ThrowsCastException(() => nonDefaultAnd.CastToChild<ClassE>());
-        Assert.IsNull(nonDefaultAnd.AsChild<ClassE>());
-        Assert.IsNotNull(nonDefaultAnd.CastToChild<ClassD>());
-        Assert.IsNotNull(nonDefaultAnd.AsChild<ClassD>());
+        Assert.IsNull(defaultAnd.CastTo<ClassE>());
+        Assert.That.ThrowsCastException(() => nonDefaultAnd.CastTo<ClassE>());
+        Assert.IsNull(nonDefaultAnd.As<ClassE>());
+        Assert.IsNotNull(nonDefaultAnd.CastTo<ClassD>());
+        Assert.IsNotNull(nonDefaultAnd.As<ClassD>());
         #endregion
         #endregion
 
         #region Class AND
         #region Parent
-        Assert.That.IsDefault(ClassAnd.FixT1<ClassA>.FromChild(defaultAnd));
-        Assert.That.IsNotDefault(ClassAnd.FixT1<ClassA>.FromChild(nonDefaultAnd));
-        Assert.That.IsDefault(ClassAnd.FixT2<IInterfaceA>.FromChild(defaultAnd));
-        Assert.That.IsNotDefault(ClassAnd.FixT2<IInterfaceA>.FromChild(nonDefaultAnd));
+        Assert.That.IsDefault(ClassAnd.FixT1<ClassA>.From(defaultAnd));
+        Assert.That.IsNotDefault(ClassAnd.FixT1<ClassA>.From(nonDefaultAnd));
+        Assert.That.IsDefault(ClassAnd.FixT2<IInterfaceA>.From(defaultAnd));
+        Assert.That.IsNotDefault(ClassAnd.FixT2<IInterfaceA>.From(nonDefaultAnd));
         Assert.That.IsDefault(ClassAnd<ClassA, IInterfaceA>.FromChildren(defaultAnd));
         Assert.That.IsNotDefault(ClassAnd<ClassA, IInterfaceA>.FromChildren(nonDefaultAnd));
         #endregion
 
         #region Child
         #region Cast T1 Only
-        Assert.That.IsDefault(defaultAnd.CastT1ToChild<ClassE>());
-        Assert.That.IsDefault(defaultAnd.T1AsChild<ClassE>());
-        Assert.That.IsNotDefault(nonDefaultAnd.CastT1ToChild<ClassD>());
-        Assert.That.IsNotDefault(nonDefaultAnd.T1AsChild<ClassD>());
-        Assert.That.ThrowsCastException(() => nonDefaultAnd.CastT1ToChild<ClassE>());
-        Assert.That.IsDefault(nonDefaultAnd.T1AsChild<ClassE>());
+        Assert.That.IsDefault(defaultAnd.CastT1To<ClassE>());
+        Assert.That.IsDefault(defaultAnd.T1As<ClassE>());
+        Assert.That.IsNotDefault(nonDefaultAnd.CastT1To<ClassD>());
+        Assert.That.IsNotDefault(nonDefaultAnd.T1As<ClassD>());
+        Assert.That.ThrowsCastException(() => nonDefaultAnd.CastT1To<ClassE>());
+        Assert.That.IsDefault(nonDefaultAnd.T1As<ClassE>());
         #endregion
 
         #region Cast T2 Only
-        Assert.That.IsDefault(defaultAnd.CastT2ToChild<IInterfaceC>());
-        Assert.That.IsDefault(defaultAnd.T2AsChild<IInterfaceC>());
-        Assert.That.IsNotDefault(nonDefaultAnd.CastT2ToChild<IInterfaceC>());
-        Assert.That.IsNotDefault(nonDefaultAnd.T2AsChild<IInterfaceC>());
-        Assert.That.ThrowsCastException(() => nonDefaultAnd.CastT2ToChild<IInterfaceD>());
-        Assert.That.IsDefault(nonDefaultAnd.T2AsChild<IInterfaceD>());
+        Assert.That.IsDefault(defaultAnd.CastT2To<IInterfaceC>());
+        Assert.That.IsDefault(defaultAnd.T2As<IInterfaceC>());
+        Assert.That.IsNotDefault(nonDefaultAnd.CastT2To<IInterfaceC>());
+        Assert.That.IsNotDefault(nonDefaultAnd.T2As<IInterfaceC>());
+        Assert.That.ThrowsCastException(() => nonDefaultAnd.CastT2To<IInterfaceD>());
+        Assert.That.IsDefault(nonDefaultAnd.T2As<IInterfaceD>());
         #endregion
 
         #region Cast Both T1 And T2

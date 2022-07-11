@@ -101,34 +101,34 @@ public class ClassOrTest
         #endregion
 
         #region Common Parent
-        Assert.IsNull(ClassOr.FixParent<object>.FromChild(defaultOr));
-        Assert.IsNotNull(ClassOr.FixParent<object>.FromChild(t1Or));
-        Assert.IsNotNull(ClassOr.FixParent<object>.FromChild(t2Or));
-        Assert.IsNotNull(ClassOr.FixParent<object>.FromChild(bothOr));
+        Assert.IsNull(ClassOr.FixParent<object>.From(defaultOr));
+        Assert.IsNotNull(ClassOr.FixParent<object>.From(t1Or));
+        Assert.IsNotNull(ClassOr.FixParent<object>.From(t2Or));
+        Assert.IsNotNull(ClassOr.FixParent<object>.From(bothOr));
         #endregion
 
         #region Common Child
         #region Default
-        Assert.IsNull(defaultOr.CastToChild<ClassB>());
-        Assert.IsNull(defaultOr.AsChild<ClassB>());
+        Assert.IsNull(defaultOr.CastTo<ClassB>());
+        Assert.IsNull(defaultOr.As<ClassB>());
         #endregion
 
         #region T1 Only
-        Assert.That.ThrowsCastException(() => t1Or.CastToChild<ClassB>());
-        Assert.IsNull(t1Or.AsChild<ClassB>());
+        Assert.That.ThrowsCastException(() => t1Or.CastTo<ClassB>());
+        Assert.IsNull(t1Or.As<ClassB>());
         #endregion
 
         #region T2 Only
-        Assert.That.ThrowsCastException(() => t2Or.CastToChild<ClassB>());
-        Assert.IsNull(t2Or.AsChild<ClassB>());
+        Assert.That.ThrowsCastException(() => t2Or.CastTo<ClassB>());
+        Assert.IsNull(t2Or.As<ClassB>());
         #endregion
 
         #region Both T1 And T2
         // Cast could succeed or fail depending on type
-        Assert.IsNotNull(bothOr.CastToChild<ClassB>());
-        Assert.That.ThrowsCastException(() => bothOr.CastToChild<ClassC>());
-        Assert.IsNotNull(bothOr.AsChild<ClassB>());
-        Assert.IsNull(bothOr.AsChild<ClassC>());
+        Assert.IsNotNull(bothOr.CastTo<ClassB>());
+        Assert.That.ThrowsCastException(() => bothOr.CastTo<ClassC>());
+        Assert.IsNotNull(bothOr.As<ClassB>());
+        Assert.IsNull(bothOr.As<ClassC>());
         #endregion
         #endregion
         #endregion
@@ -136,36 +136,36 @@ public class ClassOrTest
         #region Class OR
         #region Parent
         #region Default
-        Assert.That.IsDefault(ClassOr.FixT1<object>.FromChild(defaultOr));
-        Assert.That.IsDefault(ClassOr.FixT2<object>.FromChild(defaultOr));
+        Assert.That.IsDefault(ClassOr.FixT1<object>.From(defaultOr));
+        Assert.That.IsDefault(ClassOr.FixT2<object>.From(defaultOr));
         Assert.That.IsDefault(ClassOr<object, object>.FromChildren(defaultOr));
         #endregion
 
         #region T1 Only
-        Assert.AreEqual(TypeFlags2.T1, ClassOr.FixT1<object>.FromChild(t1Or).TypeFlags);
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT2<object>.FromChild(t1Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.T1, ClassOr.FixT1<object>.From(t1Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT2<object>.From(t1Or).TypeFlags);
         Assert.AreEqual(TypeFlags2.Both, ClassOr<object, object>.FromChildren(t1Or).TypeFlags);
         #endregion
 
         #region T2 Only
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT1<object>.FromChild(t2Or).TypeFlags);
-        Assert.AreEqual(TypeFlags2.T2, ClassOr.FixT2<object>.FromChild(t2Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT1<object>.From(t2Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.T2, ClassOr.FixT2<object>.From(t2Or).TypeFlags);
         Assert.AreEqual(TypeFlags2.Both, ClassOr<object, object>.FromChildren(t2Or).TypeFlags);
         #endregion
 
         #region Both T1 And T2
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT1<object>.FromChild(bothOr).TypeFlags);
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT2<object>.FromChild(bothOr).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT1<object>.From(bothOr).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT2<object>.From(bothOr).TypeFlags);
         Assert.AreEqual(TypeFlags2.Both, ClassOr<object, object>.FromChildren(bothOr).TypeFlags);
         #endregion
         #endregion
 
         #region Child
         #region Default
-        Assert.That.IsDefault(defaultOr.CastT1ToChild<ClassB>());
-        Assert.That.IsDefault(defaultOr.T1AsChild<ClassB>());
-        Assert.That.IsDefault(defaultOr.CastT2ToChild<ClassB>());
-        Assert.That.IsDefault(defaultOr.T2AsChild<ClassB>());
+        Assert.That.IsDefault(defaultOr.CastT1To<ClassB>());
+        Assert.That.IsDefault(defaultOr.T1As<ClassB>());
+        Assert.That.IsDefault(defaultOr.CastT2To<ClassB>());
+        Assert.That.IsDefault(defaultOr.T2As<ClassB>());
         Assert.That.IsDefault(defaultOr.CastToChildren<ClassC, InterfaceAImpl>());
         Assert.That.IsDefault(defaultOr.AsChildren<ClassC, InterfaceAImpl>());
         #endregion
@@ -173,15 +173,15 @@ public class ClassOrTest
         #region T1 Only
         #region To T1 Child
         // Cast could succeed or fail depending on type
-        Assert.AreEqual(TypeFlags2.T1, t1Or.CastT1ToChild<InterfaceAImpl>().TypeFlags);
-        Assert.That.ThrowsCastException(() => t1Or.CastT1ToChild<ClassB>());
-        Assert.AreEqual(TypeFlags2.T1, t1Or.T1AsChild<InterfaceAImpl>().TypeFlags);
-        Assert.That.IsDefault(t1Or.T1AsChild<ClassB>());
+        Assert.AreEqual(TypeFlags2.T1, t1Or.CastT1To<InterfaceAImpl>().TypeFlags);
+        Assert.That.ThrowsCastException(() => t1Or.CastT1To<ClassB>());
+        Assert.AreEqual(TypeFlags2.T1, t1Or.T1As<InterfaceAImpl>().TypeFlags);
+        Assert.That.IsDefault(t1Or.T1As<ClassB>());
         #endregion
 
         #region To T2 Child
-        Assert.AreEqual(TypeFlags2.T1, t1Or.CastT2ToChild<ClassB>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.T1, t1Or.T2AsChild<ClassB>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T1, t1Or.CastT2To<ClassB>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T1, t1Or.T2As<ClassB>().TypeFlags);
         #endregion
 
         #region To Children
@@ -195,16 +195,16 @@ public class ClassOrTest
 
         #region T2 Only
         #region To T1 Child
-        Assert.AreEqual(TypeFlags2.T2, t2Or.CastT1ToChild<ClassC>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.T2, t2Or.T1AsChild<ClassC>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T2, t2Or.CastT1To<ClassC>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T2, t2Or.T1As<ClassC>().TypeFlags);
         #endregion
 
         #region To T2 Child
         // Cast could succeed or fail depending on type
-        Assert.AreEqual(TypeFlags2.T2, t2Or.CastT2ToChild<InterfaceAImpl>().TypeFlags);
-        Assert.That.ThrowsCastException(() => t2Or.CastT2ToChild<ClassB>());
-        Assert.AreEqual(TypeFlags2.T2, t2Or.T2AsChild<InterfaceAImpl>().TypeFlags);
-        Assert.That.IsDefault(t2Or.T2AsChild<ClassB>());
+        Assert.AreEqual(TypeFlags2.T2, t2Or.CastT2To<InterfaceAImpl>().TypeFlags);
+        Assert.That.ThrowsCastException(() => t2Or.CastT2To<ClassB>());
+        Assert.AreEqual(TypeFlags2.T2, t2Or.T2As<InterfaceAImpl>().TypeFlags);
+        Assert.That.IsDefault(t2Or.T2As<ClassB>());
         #endregion
 
         #region To Children
@@ -219,19 +219,19 @@ public class ClassOrTest
         #region To T1 Child
         // Cast could succeed or fail depending on type normally, but will all succeed with bothOr since it wraps an
         // instance of both types
-        Assert.AreEqual(TypeFlags2.Both, bothOr.CastT1ToChild<ClassB>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.T2, bothOr.CastT1ToChild<ClassC>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.Both, bothOr.T1AsChild<ClassB>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.T2, bothOr.T1AsChild<ClassC>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, bothOr.CastT1To<ClassB>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T2, bothOr.CastT1To<ClassC>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, bothOr.T1As<ClassB>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T2, bothOr.T1As<ClassC>().TypeFlags);
         #endregion
 
         #region To T2 Child
         // Cast could succeed or fail depending on type normally, but will all succeed with bothOr since it wraps an
         // instance of both types
-        Assert.AreEqual(TypeFlags2.Both, bothOr.CastT2ToChild<ClassB>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.T1, bothOr.CastT2ToChild<InterfaceAImpl>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.Both, bothOr.T2AsChild<ClassB>().TypeFlags);
-        Assert.AreEqual(TypeFlags2.T1, bothOr.T2AsChild<InterfaceAImpl>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, bothOr.CastT2To<ClassB>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T1, bothOr.CastT2To<InterfaceAImpl>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, bothOr.T2As<ClassB>().TypeFlags);
+        Assert.AreEqual(TypeFlags2.T1, bothOr.T2As<InterfaceAImpl>().TypeFlags);
         #endregion
 
         #region To Children
