@@ -392,7 +392,7 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public TChild ToChild<TChild>() where TChild : class, T1, T2 => (TChild)_value;
+    public TChild CastToChild<TChild>() where TChild : class, T1, T2 => (TChild)_value;
 
     /// <summary>
     /// Performs a nullable cast to a type extending both <typeparamref name="T1"/> and <typeparamref name="T2"/>,
