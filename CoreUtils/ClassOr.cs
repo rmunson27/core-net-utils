@@ -438,7 +438,7 @@ public readonly struct ClassOr<T1, T2>
 
     /// <summary>
     /// Performs a nullable cast of <typeparamref name="T1"/>, forming a new <see cref="ClassOr{T1, T2}"/> with
-    /// <typeparamref name="T1Child"/> replacing <typeparamref name="T1"/>, or yielding the default instance if the
+    /// <typeparamref name="T1Child"/> replacing <typeparamref name="T1"/>, or returns the default instance if the
     /// value wrapped in this instance is not an instance of <typeparamref name="T1Child"/>.
     /// </summary>
     /// <typeparam name="T1Child"></typeparam>
@@ -467,7 +467,7 @@ public readonly struct ClassOr<T1, T2>
 
     /// <summary>
     /// Performs a nullable cast of <typeparamref name="T2"/>, forming a new <see cref="ClassOr{T1, T2}"/> with
-    /// <typeparamref name="T2Child"/> replacing <typeparamref name="T2"/>, or yielding the default instance if the
+    /// <typeparamref name="T2Child"/> replacing <typeparamref name="T2"/>, or returns the default instance if the
     /// value wrapped in this instance is not an instance of <typeparamref name="T2Child"/>.
     /// </summary>
     /// <typeparam name="T2Child"></typeparam>
