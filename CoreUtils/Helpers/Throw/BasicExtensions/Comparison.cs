@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Rem.CoreUtils.Helpers.Throw;
+namespace Rem.CoreUtils.Helpers.Throw.BasicExtensions;
 
 /// <summary>
 /// A series of extension methods offering a simple fluent API for throwing exceptions relating to comparable values.
 /// </summary>
-public static class BasicComparisonThrowerExtensions
+public static class ComparisonFluentThrowerExtensions
 {
     /// <summary>
     /// Throws an <see cref="ArgumentOutOfRangeException"/> if the argument value passed in is greater than the maximum
@@ -29,7 +29,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: LessThanOrEqualToParameter("max")]
     public static TNumber IfArgGreaterThan<TNumber>(
-        this IBasicNumericThrower _, in TNumber max, in TNumber argValue, string argName, string? message = null)
+        this FluentThrower _, in TNumber max, in TNumber argValue, string argName, string? message = null)
         where TNumber : IComparable<TNumber>
         => argValue.CompareTo(max) > 0
             ? throw new ArgumentOutOfRangeException(
@@ -55,7 +55,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: LessThanParameter("max")]
     public static TNumber IfArgGreaterThanOrEqualTo<TNumber>(
-        this IBasicNumericThrower _, in TNumber max, in TNumber argValue, string argName, string? message = null)
+        this FluentThrower _, in TNumber max, in TNumber argValue, string argName, string? message = null)
         where TNumber : IComparable<TNumber>
         => argValue.CompareTo(max) >= 0
             ? throw new ArgumentOutOfRangeException(
@@ -81,7 +81,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: GreaterThanParameter("min")]
     public static TNumber IfArgLessThanOrEqualTo<TNumber>(
-        this IBasicNumericThrower _, in TNumber min, in TNumber argValue, string argName, string? message = null)
+        this FluentThrower _, in TNumber min, in TNumber argValue, string argName, string? message = null)
         where TNumber : IComparable<TNumber>
         => argValue.CompareTo(min) <= 0
             ? throw new ArgumentOutOfRangeException(
@@ -107,7 +107,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: GreaterThanOrEqualToParameter("min")]
     public static TNumber IfArgLessThan<TNumber>(
-        this IBasicNumericThrower _, in TNumber min, in TNumber argValue, string argName, string? message = null)
+        this FluentThrower _, in TNumber min, in TNumber argValue, string argName, string? message = null)
         where TNumber : IComparable<TNumber>
         => argValue.CompareTo(min) < 0
             ? throw new ArgumentOutOfRangeException(
@@ -133,7 +133,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: LessThanOrEqualToParameter("max")]
     public static TNumber IfPropSetGreaterThan<TNumber>(
-        this IBasicNumericThrower _,
+        this FluentThrower _,
         in TNumber max, in TNumber propSetValue, [CallerMemberName] string? propName = null, string? message = null)
         where TNumber : IComparable<TNumber>
         => propSetValue.CompareTo(max) > 0
@@ -160,7 +160,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: LessThanParameter("max")]
     public static TNumber IfPropSetGreaterThanOrEqualTo<TNumber>(
-        this IBasicNumericThrower _,
+        this FluentThrower _,
         in TNumber max, in TNumber propSetValue, [CallerMemberName] string? propName = null, string? message = null)
         where TNumber : IComparable<TNumber>
         => propSetValue.CompareTo(max) >= 0
@@ -187,7 +187,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: GreaterThanParameter("min")]
     public static TNumber IfPropSetLessThanOrEqualTo<TNumber>(
-        this IBasicNumericThrower _,
+        this FluentThrower _,
         in TNumber min, in TNumber propSetValue, [CallerMemberName] string? propName = null, string? message = null)
         where TNumber : IComparable<TNumber>
         => propSetValue.CompareTo(min) <= 0
@@ -214,7 +214,7 @@ public static class BasicComparisonThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: GreaterThanOrEqualToParameter("min")]
     public static TNumber IfPropSetLessThan<TNumber>(
-        this IBasicNumericThrower _,
+        this FluentThrower _,
         in TNumber min, in TNumber propSetValue, [CallerMemberName] string? propName = null, string? message = null)
         where TNumber : IComparable<TNumber>
         => propSetValue.CompareTo(min) < 0
@@ -224,9 +224,4 @@ public static class BasicComparisonThrowerExtensions
                 message ?? $"Value must be greater than {min}.")
             : propSetValue;
 }
-
-/// <summary>
-/// An interface allowing access to the extension methods in <see cref="BasicComparisonThrowerExtensions"/>.
-/// </summary>
-public interface IBasicComparisonThrower { }
 

@@ -8,13 +8,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Rem.CoreUtils.Helpers.Throw;
+namespace Rem.CoreUtils.Helpers.Throw.BasicExtensions;
 
 /// <summary>
 /// A series of extension methods offering a simple fluent API for throwing exceptions relating to invalid default
 /// values or invalid enumeration values.
 /// </summary>
-public static class InvalidDefaultValueThrowerExtensions
+public static class InvalidDefaultValueFluentThrowerExtensions
 {
     #region Structs
     /// <summary>
@@ -35,7 +35,7 @@ public static class InvalidDefaultValueThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NotDefault]
     public static TStruct IfStructArgDefault<TStruct>(
-        this IInvalidDefaultValueThrower _, in TStruct argValue, string argName, string? message = null)
+        this FluentThrower _, in TStruct argValue, string argName, string? message = null)
         where TStruct : struct, IDefaultDeterminableStruct
     {
         if (argValue.IsNotDefault) return argValue;
@@ -59,7 +59,7 @@ public static class InvalidDefaultValueThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NotDefault]
     public static ImmutableArray<T> IfStructArgDefault<T>(
-        this IInvalidDefaultValueThrower _, in ImmutableArray<T> argValue, string argName, string? message = null)
+        this FluentThrower _, in ImmutableArray<T> argValue, string argName, string? message = null)
         => argValue.IsDefault
             ? throw new StructArgumentDefaultException(
                 argName, message ?? "Immutable array argument was default.")
@@ -83,7 +83,7 @@ public static class InvalidDefaultValueThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NotDefault]
     public static TStruct IfStructPropSetDefault<TStruct>(
-        this IInvalidDefaultValueThrower _,
+        this FluentThrower _,
         in TStruct propSetValue, [CallerMemberName] string? propName = null, string? message = null)
         where TStruct : struct, IDefaultDeterminableStruct
     {
@@ -113,7 +113,7 @@ public static class InvalidDefaultValueThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NamedEnum]
     public static TEnum IfEnumArgUnnamed<TEnum>(
-        this IInvalidDefaultValueThrower _, TEnum argValue, string argName, string? message = null)
+        this FluentThrower _, TEnum argValue, string argName, string? message = null)
         where TEnum : struct, Enum
         => Enums.IsDefined(argValue)
             ? argValue
@@ -136,7 +136,7 @@ public static class InvalidDefaultValueThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NamedEnum]
     public static TEnum IfEnumPropSetUnnamed<TEnum>(
-        this IInvalidDefaultValueThrower _,
+        this FluentThrower _,
         TEnum propSetValue, [CallerMemberName] string? propName = null, string? message = null)
         where TEnum : struct, Enum
         => Enums.IsDefined(propSetValue)
@@ -162,7 +162,7 @@ public static class InvalidDefaultValueThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NotNull]
     public static T IfArgNull<T>(
-        this IInvalidDefaultValueThrower _, T argValue, string argName, string? message = null)
+        this FluentThrower _, T argValue, string argName, string? message = null)
     {
         if (argValue is null)
         {
@@ -187,7 +187,7 @@ public static class InvalidDefaultValueThrowerExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NotNull]
     public static T IfPropSetNull<T>(
-        this IInvalidDefaultValueThrower _,
+        this FluentThrower _,
         T propSetValue, [CallerMemberName] string? propName = null, string? message = null)
     {
         if (propSetValue is null)
@@ -199,9 +199,4 @@ public static class InvalidDefaultValueThrowerExtensions
     }
     #endregion
 }
-
-/// <summary>
-/// An interface allowing access to the extension methods in <see cref="InvalidDefaultValueThrowerExtensions"/>.
-/// </summary>
-public interface IInvalidDefaultValueThrower { }
 
