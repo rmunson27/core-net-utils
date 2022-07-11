@@ -61,53 +61,71 @@ public static class ClassAnd
             || t2Comparer.Equals(Unsafe.As<T2>(o1), Unsafe.As<T2>(o2));
     #endregion
 
-    #region Casting
+    #region Types
     /// <summary>
-    /// A class containing casting methods for the first type in a class AND.
+    /// Allows the first type of a class AND to be fixed, permitting generic arguments to methods within the class to
+    /// be inferred by the compiler.
     /// </summary>
-    /// <remarks>
-    /// This class allows the generic arguments for its casting methods to be inferred by the compiler based on the
-    /// method arguments.
-    /// </remarks>
-    /// <typeparam name="T"></typeparam>
-    public static class T1<T> where T : class
+    /// <typeparam name="T1"></typeparam>
+    public static class FixT1<T1> where T1 : class
     {
         /// <summary>
-        /// Creates a new <see cref="ClassAnd{T1, T2}"/> from the value passed in without casting.
+        /// Retypes the value passed in without casting, creating a new value by typing <typeparamref name="T1Child"/>
+        /// as <typeparamref name="T1"/>.
         /// </summary>
-        /// <typeparam name="TChild"></typeparam>
+        /// <typeparam name="T1Child"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassAnd<T, T2> FromChild<TChild, T2>(ClassAnd<TChild, T2> child)
-            where TChild : class, T
+        public static ClassAnd<T1, T2> FromChild<T1Child, T2>(ClassAnd<T1Child, T2> child)
+            where T1Child : class, T1
             where T2 : class
             => new(child._value);
     }
 
     /// <summary>
-    /// A class containing casting methods for the second type in a class AND.
+    /// Allows the second type of a class AND to be fixed, permitting generic arguments to methods within the class to
+    /// be inferred by the compiler.
     /// </summary>
-    /// <remarks>
-    /// This class allows the generic arguments for its casting methods to be inferred by the compiler based on the
-    /// method arguments.
-    /// </remarks>
-    /// <typeparam name="T"></typeparam>
-    public static class T2<T> where T : class
+    /// <typeparam name="T2"></typeparam>
+    public static class FixT2<T2> where T2 : class
     {
         /// <summary>
-        /// Creates a new <see cref="ClassAnd{T1, T2}"/> from the value passed in without casting.
+        /// Retypes the value passed in without casting, creating a new value by typing <typeparamref name="T2Child"/>
+        /// as <typeparamref name="T2"/>.
         /// </summary>
         /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="TChild"></typeparam>
+        /// <typeparam name="T2Child"></typeparam>
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassAnd<T1, T> FromChild<T1, TChild>(ClassAnd<T1, TChild> child)
+        public static ClassAnd<T1, T2> FromChild<T1, T2Child>(ClassAnd<T1, T2Child> child)
             where T1 : class
-            where TChild : class, T
+            where T2Child : class, T2
             => new(child._value);
+    }
+
+    /// <summary>
+    /// Allows a parent type of all types of a class AND to be fixed, permitting generic arguments to methods within
+    /// the class to be inferred by the compiler.
+    /// </summary>
+    /// <typeparam name="TParent"></typeparam>
+    public static class FixParent<TParent> where TParent : class
+    {
+        /// <summary>
+        /// Gets the value wrapped in the <see cref="ClassAnd{T1, T2}"/> passed in typed as an instance of
+        /// <typeparamref name="TParent"/>.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="child"></param>
+        /// <returns></returns>
+        [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
+        public static TParent FromChild<T1, T2>(ClassAnd<T1, T2> child)
+            where T1 : class, TParent
+            where T2 : class, TParent
+            => Unsafe.As<TParent>(child._value);
     }
     #endregion
 }
@@ -168,7 +186,7 @@ public readonly struct ClassAnd<T1, T2>
     /// <param name="Value"></param>
     /// <returns></returns>
     [return: NotDefault]
-    public static ClassAnd<T1, T2> Make<T>(T Value) where T : T1, T2
+    public static ClassAnd<T1, T2> FromChild<T>(T Value) where T : T1, T2
         => new(Throw.IfArgNull(Value, nameof(Value)));
 
     internal ClassAnd(object Value) { _value = Value; }
@@ -287,50 +305,85 @@ public readonly struct ClassAnd<T1, T2>
     /// <param name="child"></param>
     /// <returns></returns>
     [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-    public static ClassAnd<T1, T2> FromChild<T1Child, T2Child>(ClassAnd<T1Child, T2Child> child)
+    public static ClassAnd<T1, T2> FromChildren<T1Child, T2Child>(ClassAnd<T1Child, T2Child> child)
         where T1Child : class, T1
         where T2Child : class, T2
         => new(child._value);
 
     /// <summary>
     /// Performs an explicit cast of <typeparamref name="T1"/>, forming a new <see cref="ClassAnd{T1, T2}"/> with
-    /// <typeparamref name="TChild1"/> replacing <typeparamref name="T1"/>.
+    /// <typeparamref name="T1Child"/> replacing <typeparamref name="T1"/>.
     /// </summary>
-    /// <typeparam name="TChild1"></typeparam>
+    /// <typeparam name="T1Child"></typeparam>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassAnd<TChild1, T2> ExplicitCast1<TChild1>() where TChild1 : class, T1 => new((TChild1)_value);
+    public ClassAnd<T1Child, T2> CastT1ToChild<T1Child>() where T1Child : class, T1 => new((T1Child)_value);
+
+    /// <summary>
+    /// Performs a nullable cast of <typeparamref name="T1"/>, forming a new <see cref="ClassAnd{T1, T2}"/> with
+    /// <typeparamref name="T1Child"/> replacing <typeparamref name="T1"/>, or returns the default instance if the
+    /// value wrapped in this instance is not an instance of <typeparamref name="T1Child"/>.
+    /// </summary>
+    /// <typeparam name="T1Child"></typeparam>
+    /// <returns></returns>
+    public ClassAnd<T1Child, T2> T1AsChild<T1Child>() where T1Child : class, T1
+        => _value is T1Child ? new(_value) : default;
 
     /// <summary>
     /// Performs an explicit cast of <typeparamref name="T2"/>, forming a new <see cref="ClassAnd{T1, T2}"/> with
-    /// <typeparamref name="TChild2"/> replacing <typeparamref name="T2"/>.
+    /// <typeparamref name="T2Child"/> replacing <typeparamref name="T2"/>.
     /// </summary>
-    /// <typeparam name="TChild2"></typeparam>
+    /// <typeparam name="T2Child"></typeparam>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassAnd<T1, TChild2> ExplicitCast2<TChild2>() where TChild2 : class, T2 => new((TChild2)_value);
+    public ClassAnd<T1, T2Child> CastT2ToChild<T2Child>() where T2Child : class, T2 => new((T2Child)_value);
+
+    /// <summary>
+    /// Performs a nullable cast of <typeparamref name="T2"/>, forming a new <see cref="ClassAnd{T1, T2}"/> with
+    /// <typeparamref name="T2Child"/> replacing <typeparamref name="T2"/>, or returns the default instance if the
+    /// value wrapped in this instance is not an instance of <typeparamref name="T2Child"/>.
+    /// </summary>
+    /// <typeparam name="T2Child"></typeparam>
+    /// <returns></returns>
+    public ClassAnd<T1, T2Child> T2AsChild<T2Child>() where T2Child : class, T2
+        => _value is T2Child ? new(_value) : default;
 
     /// <summary>
     /// Performs an explicit cast of both <typeparamref name="T1"/> and <typeparamref name="T2"/>, forming a new
-    /// <see cref="ClassAnd{T1, T2}"/> with <typeparamref name="TChild1"/> replacing <typeparamref name="T1"/> and
-    /// <typeparamref name="TChild2"/> replacing <typeparamref name="T2"/>.
+    /// <see cref="ClassAnd{T1, T2}"/> with <typeparamref name="T1Child"/> replacing <typeparamref name="T1"/> and
+    /// <typeparamref name="T2Child"/> replacing <typeparamref name="T2"/>.
     /// </summary>
-    /// <typeparam name="TChild1"></typeparam>
-    /// <typeparam name="TChild2"></typeparam>
+    /// <typeparam name="T1Child"></typeparam>
+    /// <typeparam name="T2Child"></typeparam>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
     [return: NotDefault, MaybeDefaultIfInstanceDefault]
-    public ClassAnd<TChild1, TChild2> ExplicitCast<TChild1, TChild2>()
-        where TChild1 : class, T1
-        where TChild2 : class, T2
+    public ClassAnd<T1Child, T2Child> CastToChildren<T1Child, T2Child>()
+        where T1Child : class, T1
+        where T2Child : class, T2
     {
         if (IsDefault) return default;
 
-        if (_value is TChild1 and TChild2) return new(_value);
-        else throw GetWrappedType().BadCastTo<TChild1, TChild2>();
+        if (_value is T1Child and T2Child) return new(_value);
+        else throw GetWrappedType().BadCastTo<T1Child, T2Child>();
     }
+
+    /// <summary>
+    /// Performs a nullable cast of both <typeparamref name="T1"/> and <typeparamref name="T2"/>, forming a new
+    /// <see cref="ClassAnd{T1, T2}"/> with <typeparamref name="TChild1"/> replacing <typeparamref name="T1"/> and
+    /// <typeparamref name="TChild2"/> replacing <typeparamref name="T2"/>, or returns the default instance if the
+    /// value wrapped in this type is not an instance of <typeparamref name="T1Child"/>
+    /// and <typeparamref name="T2Child"/>.
+    /// </summary>
+    /// <typeparam name="T1Child"></typeparam>
+    /// <typeparam name="T2Child"></typeparam>
+    /// <returns></returns>
+    public ClassAnd<T1Child, T2Child> AsChildren<T1Child, T2Child>()
+        where T1Child : class, T1
+        where T2Child : class, T2
+        => _value is T1Child and T2Child ? new(_value) : default;
 
     /// <summary>
     /// Performs an explicit cast to a type extending both <typeparamref name="T1"/> and <typeparamref name="T2"/>.
@@ -338,11 +391,20 @@ public readonly struct ClassAnd<T1, T2>
     /// <typeparam name="TChild"></typeparam>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">The cast was invalid.</exception>
-    [return: MaybeDefaultIfInstanceDefault]
-    public TChild ExplicitCast<TChild>() where TChild : class, T1, T2 => (TChild)_value;
+    [return: NotDefault, MaybeDefaultIfInstanceDefault]
+    public TChild ToChild<TChild>() where TChild : class, T1, T2 => (TChild)_value;
+
+    /// <summary>
+    /// Performs a nullable cast to a type extending both <typeparamref name="T1"/> and <typeparamref name="T2"/>,
+    /// returning the default instance if the type wrapped in this instance is not of
+    /// type <typeparamref name="TChild"/>.
+    /// </summary>
+    /// <typeparam name="TChild"></typeparam>
+    /// <returns></returns>
+    public TChild? AsChild<TChild>() where TChild : class, T1, T2 => _value as TChild;
     #endregion
 
-    #region Other Methods
+        #region Other Methods
     /// <inheritdoc cref="IAndType{T1, T2}.GetWrappedType"/>
     [DoesNotReturnIfInstanceDefault]
     public Type GetWrappedType() => _value.GetType();
