@@ -206,8 +206,7 @@ public readonly struct ClassAnd<T1, T2>
     /// <returns></returns>
     public bool Equals(object? o, IEqualityComparer<T1?> t1Comparer, IEqualityComparer<T2?> t2Comparer) => o switch
     {
-        null => IsDefault,
-        T1 and T2 => ClassAnd.EqualsUnsafe<T1, T2>(_value, o),
+        (T1 and T2) or null => ClassAnd.EqualsUnsafe<T1, T2>(_value, o),
         ClassAnd<T1, T2> other => Equals(other),
         ClassAnd<T2, T1> other => Equals(other),
         _ => false,
@@ -318,7 +317,7 @@ public readonly struct ClassAnd<T1, T2>
     [return: MaybeDefaultIfParameterDefault("value")]
     public static implicit operator T2(ClassAnd<T1, T2> value) => value.AsT2;
 
-    [return: MaybeDefaultIfParameterDefault("value")]
+    [return: NotDefault, MaybeDefaultIfParameterDefault("value")]
     public static implicit operator ClassAnd<T2, T1>(ClassAnd<T1, T2> value) => new(value._value);
 
     [return: NotDefault, MaybeDefaultIfParameterDefault("value")]
