@@ -29,7 +29,7 @@ public sealed class Ref<T> : ObservableObject
     /// Constructs a new instance of the <see cref="Ref{T}"/> class wrapping the initial value passed in.
     /// </summary>
     /// <param name="initialValue"></param>
-    public Ref(T initialValue)
+    public Ref(in T initialValue)
     {
         _value = initialValue;
     }
