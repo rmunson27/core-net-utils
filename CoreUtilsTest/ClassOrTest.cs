@@ -40,8 +40,8 @@ public class ClassOrTest
         var a = new ClassA();
 
         // Object-class OR comparisons
-        Assert.AreEqual(new RecordA(4), new ClassOr<RecordA, ClassA>(new RecordA(4)));
-        Assert.AreNotEqual(new RecordA(5), new ClassOr<RecordA, ClassA>(new RecordA(4)));
+        Assert.IsTrue(new ClassOr<RecordA, ClassA>(new RecordB(4)).Equals(new RecordB(4)));
+        Assert.IsFalse(new ClassOr<RecordA, ClassA>(new RecordB(4)).Equals(new RecordB(5)));
         
         // Class OR comparisons
         Assert.AreEqual(new ClassOr<RecordA, ClassA>(new RecordA(4)), new ClassOr<RecordA, ClassA>(new RecordA(4)));
@@ -55,7 +55,7 @@ public class ClassOrTest
         Assert.AreNotEqual(new ClassOr<RecordA, ClassA>(a), new ClassOr<ClassA, RecordA>(new ClassA()));
 
         // Class OR default comparisons
-        Assert.AreEqual(default(ClassOr<RecordA, ClassA>), default(ClassA));
+        Assert.IsTrue(default(ClassOr<RecordA, ClassA>).Equals(null as object));
     }
 
     /// <summary>
@@ -254,6 +254,8 @@ public class ClassOrTest
     private class ClassB : ClassA, IInterfaceA { }
 
     private class ClassA { }
+
+    private record class RecordB(short S) : RecordA(S);
 
     private record class RecordA(short S);
 
