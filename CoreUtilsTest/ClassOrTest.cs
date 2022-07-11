@@ -62,7 +62,7 @@ public class ClassOrTest
     /// Tests conversions between types and class OR values.
     /// </summary>
     [TestMethod]
-    public void TestCasting()
+    public void TestConversions()
     {
         var defaultOr = default(ClassOr<ClassA, IInterfaceA>);
         var t2Or = new ClassOr<ClassA, IInterfaceA>(new InterfaceAImpl());
