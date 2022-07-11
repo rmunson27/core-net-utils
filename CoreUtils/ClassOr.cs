@@ -16,50 +16,69 @@ using TypeFlags2 = OrType2.TypeFlags;
 public static class ClassOr
 {
     /// <summary>
-    /// Allows one of the types of the class OR to be fixed to simplify generic calls.
+    /// Allows the first type of a class OR to be fixed, permitting generic arguments to methods within the class to
+    /// be inferred by the compiler.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public static class Fix<T> where T : class
+    /// <typeparam name="T1"></typeparam>
+    public static class FixT1<T1> where T1 : class
     {
         /// <summary>
-        /// Creates a new <see cref="ClassOr{T1, T2}"/> from the value passed in without casting.
+        /// Retypes the value passed in without casting, creating a new value by typing <typeparamref name="T1Child"/>
+        /// as <typeparamref name="T1"/>.
         /// </summary>
-        /// <typeparam name="TChild"></typeparam>
+        /// <typeparam name="T1Child"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassOr<T, T2> FromT1Child<TChild, T2>(ClassOr<TChild, T2> child)
-            where TChild : class, T
+        public static ClassOr<T1, T2> FromChild<T1Child, T2>(ClassOr<T1Child, T2> child)
+            where T1Child : class, T1
             where T2 : class
-            => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T, T2>(child._value));
+            => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T1, T2>(child._value));
+    }
 
+    /// <summary>
+    /// Allows the second type of a class OR to be fixed, permitting generic arguments to methods within the class to
+    /// be inferred by the compiler.
+    /// </summary>
+    /// <typeparam name="T2"></typeparam>
+    public static class FixT2<T2> where T2 : class
+    {
         /// <summary>
-        /// Creates a new <see cref="ClassOr{T1, T2}"/> from the value passed in without casting.
+        /// Retypes the value passed in without casting, creating a new value by typing <typeparamref name="T2Child"/>
+        /// as <typeparamref name="T2"/>.
         /// </summary>
         /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="TChild"></typeparam>
+        /// <typeparam name="T2Child"></typeparam>
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static ClassOr<T1, T> FromT2Child<T1, TChild>(ClassOr<T1, TChild> child)
+        public static ClassOr<T1, T2> FromChild<T1, T2Child>(ClassOr<T1, T2Child> child)
             where T1 : class
-            where TChild : class, T
-            => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T1, T>(child._value));
+            where T2Child : class, T2
+            => child.IsDefault ? default : new(child._value, OrType2.DescribeType<T1, T2>(child._value));
+    }
 
+    /// <summary>
+    /// Allows a parent type of all types of a class AND to be fixed, permitting generic arguments to methods within
+    /// the class to be inferred by the compiler.
+    /// </summary>
+    /// <typeparam name="TParent"></typeparam>
+    public static class FixParent<TParent> where TParent : class
+    {
         /// <summary>
-        /// Gets the value wrapped in the <see cref="ClassOr{T1, T2}"/> passed in as an instance of
-        /// <typeparamref name="T"/>.
+        /// Gets the value wrapped in the <see cref="ClassOr{T1, T2}"/> passed in typed as an instance of
+        /// <typeparamref name="TParent"/>.
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <param name="child"></param>
         /// <returns></returns>
         [return: NotDefault, MaybeDefaultIfParameterDefault("child")]
-        public static T FromChild<T1, T2>(ClassOr<T1, T2> child)
-            where T1 : class, T
-            where T2 : class, T
-            => Unsafe.As<T>(child._value);
+        public static TParent FromChild<T1, T2>(ClassOr<T1, T2> child)
+            where T1 : class, TParent
+            where T2 : class, TParent
+            => Unsafe.As<TParent>(child._value);
     }
 }
 

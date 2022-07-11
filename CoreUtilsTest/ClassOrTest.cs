@@ -101,10 +101,10 @@ public class ClassOrTest
         #endregion
 
         #region Common Parent
-        Assert.IsNull(ClassOr.Fix<object>.FromChild(defaultOr));
-        Assert.IsNotNull(ClassOr.Fix<object>.FromChild(t1Or));
-        Assert.IsNotNull(ClassOr.Fix<object>.FromChild(t2Or));
-        Assert.IsNotNull(ClassOr.Fix<object>.FromChild(bothOr));
+        Assert.IsNull(ClassOr.FixParent<object>.FromChild(defaultOr));
+        Assert.IsNotNull(ClassOr.FixParent<object>.FromChild(t1Or));
+        Assert.IsNotNull(ClassOr.FixParent<object>.FromChild(t2Or));
+        Assert.IsNotNull(ClassOr.FixParent<object>.FromChild(bothOr));
         #endregion
 
         #region Common Child
@@ -136,26 +136,26 @@ public class ClassOrTest
         #region Class OR
         #region Parent
         #region Default
-        AssertIsDefault(ClassOr.Fix<object>.FromT1Child(defaultOr));
-        AssertIsDefault(ClassOr.Fix<object>.FromT2Child(defaultOr));
+        AssertIsDefault(ClassOr.FixT1<object>.FromChild(defaultOr));
+        AssertIsDefault(ClassOr.FixT2<object>.FromChild(defaultOr));
         AssertIsDefault(ClassOr<object, object>.FromChildren(defaultOr));
         #endregion
 
         #region T1 Only
-        Assert.AreEqual(TypeFlags2.T1, ClassOr.Fix<object>.FromT1Child(t1Or).TypeFlags);
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.Fix<object>.FromT2Child(t1Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.T1, ClassOr.FixT1<object>.FromChild(t1Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT2<object>.FromChild(t1Or).TypeFlags);
         Assert.AreEqual(TypeFlags2.Both, ClassOr<object, object>.FromChildren(t1Or).TypeFlags);
         #endregion
 
         #region T2 Only
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.Fix<object>.FromT1Child(t2Or).TypeFlags);
-        Assert.AreEqual(TypeFlags2.T2, ClassOr.Fix<object>.FromT2Child(t2Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT1<object>.FromChild(t2Or).TypeFlags);
+        Assert.AreEqual(TypeFlags2.T2, ClassOr.FixT2<object>.FromChild(t2Or).TypeFlags);
         Assert.AreEqual(TypeFlags2.Both, ClassOr<object, object>.FromChildren(t2Or).TypeFlags);
         #endregion
 
         #region Both T1 And T2
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.Fix<object>.FromT1Child(bothOr).TypeFlags);
-        Assert.AreEqual(TypeFlags2.Both, ClassOr.Fix<object>.FromT2Child(bothOr).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT1<object>.FromChild(bothOr).TypeFlags);
+        Assert.AreEqual(TypeFlags2.Both, ClassOr.FixT2<object>.FromChild(bothOr).TypeFlags);
         Assert.AreEqual(TypeFlags2.Both, ClassOr<object, object>.FromChildren(bothOr).TypeFlags);
         #endregion
         #endregion
