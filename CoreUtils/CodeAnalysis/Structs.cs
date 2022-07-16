@@ -92,8 +92,11 @@ public sealed class DefaultableWithTypeParameterAttribute : Attribute
     /// <summary>
     /// The name of the type parameter that determines the type's defaultability.
     /// </summary>
-    public string ParameterName { get; }
+    public string TypeParameterName { get; }
+    public DefaultableWithTypeParameterAttribute(string TypeParameterName)
+    {
+        this.TypeParameterName = TypeParameterName;
+    }
 
-    public DefaultableWithTypeParameterAttribute(string ParameterName) { this.ParameterName = ParameterName; }
 }
 
