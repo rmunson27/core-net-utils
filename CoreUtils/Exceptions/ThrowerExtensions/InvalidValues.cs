@@ -124,6 +124,41 @@ public static class InvalidDefaultValueFluentThrowerExtensions
                     : $"{message} (Parameter '{argName}')");
 
     /// <summary>
+    /// Throws an <see cref="InvalidEnumArgumentException"/> if the argument passed in is not either
+    /// <see langword="null"/> or a named, defined value of type <typeparamref name="TEnum"/>.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="argValue">The value of the argument.</param>
+    /// <param name="argName">The name of the argument.</param>
+    /// <param name="message">
+    /// An optional error message to construct an exception with, or <see langword="null"/> to use a
+    /// default message.
+    /// </param>
+    /// <returns>The value passed in.</returns>
+    /// <exception cref="InvalidEnumArgumentException">
+    /// <paramref name="argValue"/> was not either <see langword="null"/> or a named, defined value of
+    /// type <typeparamref name="TEnum"/>.
+    /// </exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [return: NamedEnum]
+    public static TEnum? IfEnumArgUnnamed<TEnum>(
+        this FluentThrower _, TEnum? argValue, string argName, string? message = null)
+        where TEnum : struct, Enum
+    {
+        if (argValue is TEnum actualEnumValue)
+        {
+            return Enums.IsDefined(actualEnumValue)
+                    ? argValue
+                    : throw new InvalidEnumArgumentException(
+                        message is null
+                            ? $"Parameter '{argName}' must be either null or a named, defined"
+                                + $" value of type {typeof(TEnum)}."
+                            : $"{message} (Parameter '{argName}')");
+        }
+        else return null;
+    }
+
+    /// <summary>
     /// Throws an <see cref="InvalidEnumPropertySetException"/> if the property set value passed in is not a
     /// named, defined value of type <typeparamref name="TEnum"/>.
     /// </summary>
@@ -146,6 +181,38 @@ public static class InvalidDefaultValueFluentThrowerExtensions
                 message is null
                     ? $"Property '{propName}' cannot be set to an unnamed value of type {typeof(TEnum)}."
                     : $"{message} (Property '{propName}')");
+
+    /// <summary>
+    /// Throws an <see cref="InvalidEnumPropertySetException"/> if the property set value passed in is not either
+    /// <see langword="null"/> or a named, defined value of type <typeparamref name="TEnum"/>.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="propSetValue">The value the property is being set to.</param>
+    /// <param name="propName">The name of the property.</param>
+    /// <returns>The value passed in.</returns>
+    /// <exception cref="InvalidEnumPropertySetException">
+    /// <paramref name="propSetValue"/> was not either <see langword="null"/> or a named, defined value of
+    /// type <typeparamref name="TEnum"/>.
+    /// </exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [return: NamedEnum]
+    public static TEnum? IfEnumPropSetUnnamed<TEnum>(
+        this FluentThrower _,
+        TEnum? propSetValue, [CallerMemberName] string? propName = null, string? message = null)
+        where TEnum : struct, Enum
+    {
+        if (propSetValue is TEnum actualEnumValue)
+        {
+            return Enums.IsDefined(actualEnumValue)
+                    ? propSetValue
+                    : throw new InvalidEnumPropertySetException(
+                        message is null
+                            ? $"Property '{propName}' must be set to either null or a named, defined"
+                                + $" value of type {typeof(TEnum)}."
+                            : $"{message} (Property '{propName}')");
+        }
+        else return null;
+    }
     #endregion
 
     #region Nullable
