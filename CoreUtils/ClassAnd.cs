@@ -443,7 +443,7 @@ public readonly struct ClassAnd<T1, T2>
     public TChild? As<TChild>() where TChild : class, T1, T2 => _value as TChild;
     #endregion
 
-        #region Other Methods
+    #region Other Methods
     /// <inheritdoc cref="IAndType{T1, T2}.GetWrappedType"/>
     [DoesNotReturnIfInstanceDefault]
     public Type GetWrappedType() => _value.GetType();
