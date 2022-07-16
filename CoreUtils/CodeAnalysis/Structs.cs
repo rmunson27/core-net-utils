@@ -93,10 +93,30 @@ public sealed class DefaultableWithTypeParameterAttribute : Attribute
     /// The name of the type parameter that determines the type's defaultability.
     /// </summary>
     public string TypeParameterName { get; }
+
     public DefaultableWithTypeParameterAttribute(string TypeParameterName)
     {
         this.TypeParameterName = TypeParameterName;
     }
+}
 
+/// <summary>
+/// Indicates that the type parameter with the given name of a targeted field, property or return value may be defaultable,
+/// even if the corresponding type or other attributes disallow it.
+/// </summary>
+[AttributeUsage(
+    AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.ReturnValue,
+    AllowMultiple = true, Inherited = false)]
+public sealed class MaybeDefaultTypeParameterAttribute : Attribute
+{
+    /// <summary>
+    /// The name of the type parameter that may be defaultable.
+    /// </summary>
+    public string TypeParameterName { get; }
+
+    public MaybeDefaultTypeParameterAttribute(string TypeParameterName)
+    {
+        this.TypeParameterName = TypeParameterName;
+    }
 }
 
